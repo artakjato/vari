@@ -1,18 +1,33 @@
 @import "tailwindcss";
 
 :root {
+  /* Core backgrounds*/
      --bg-primary: #FDF6EE;
+     --bg-canvas: #FDF6EE; 
      --bg-surface: #FFFFFF;
+
+  /*Text colors*/
      --text-primary: #2C1810;
      --text-secondary: #8B7355;
+
+  /*Brand accent colors*/
      --accent-primary: #C76B28;
      --accent-secondary: #E8A87C;
+
+  /*Industry bubble colors (one per industry)*/
      --industry-web: #D4845A;
      --industry-mobile: #B8956A;
      --industry-gaming: #C9A882;
      --industry-data: #A89078;
      --industry-security: #7B8FA1;
+     --industry-cloud: #5B8C5A;
+     --industry-devops: #C97B3D;
+     --industry-embeded: #8B6F47;
+
+  /*Borders and feedback*/
      --border-subtle: #E8DDD0;
+     --error: #D94444;
+     --success: #4A9D5B; 
    }
 
    body {
