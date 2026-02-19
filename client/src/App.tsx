@@ -2,13 +2,14 @@
 import './index.css'
 import { Button } from "./components/ui/Button";
 
-function App() {
+export default function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <h1 className="text-2xl font-semibold">Welcome</h1>
-      <Button/>
+    <div className="p-6 space-x-3">
+      <Button>Primary</Button>
+      <Button variant="secondary">Secondary</Button>
+      <Button variant="ghost">Ghost</Button>
     </div>
-  )
+  );
 }
 
-export default App
+
