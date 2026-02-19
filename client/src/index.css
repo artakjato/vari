@@ -9,3 +9,18 @@ html, body, #root {
 body {
 	font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
 }
+
+   :root {
+     --bg-primary: #FDF6EE;
+     --bg-surface: #FFFFFF;
+     --text-primary: #2C1810;
+     --text-secondary: #8B7355;
+     --accent-primary: #C76B28;
+     --accent-secondary: #E8A87C;
+     --industry-web: #D4845A;
+     --industry-mobile: #B8956A;
+     --industry-gaming: #C9A882;
+     --industry-data: #A89078;
+     --industry-security: #7B8FA1;
+     --border-subtle: #E8DDD0;
+   }
