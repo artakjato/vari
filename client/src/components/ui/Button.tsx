@@ -1,34 +1,54 @@
-import React from 'react';
-import { motion } from "framer-motion"; 
+import { ReactNode } from "react";
+import { motion } from "framer-motion";
 
-type ButtonVariant = "primary" | "secondary" | "ghost"; 
+interface ButtonProps {
+  variant?: "primary" | "secondary" | "ghost";
+  children: ReactNode;
+  onClick?: () => void;
+  style?: React.CSSProperties;
+}
 
-type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: ButtonVariant;
-}; 
-
-const baseClasses =
-"inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold" +  // + for joining long lines 
-"transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)]" +
-"disabled:opacity-50 disabled:cursor-not-allowed"; 
-
-const variantClasses: Record<ButtonVariant, string> = {
-  primary: "bg-[var(--accent-primary)] text-white",
-  secondary: "bg-[var(--accent-secondary)] text-[var(--text-primary)]",
-  ghost: "bg-transparent border border-[var(--border-subtle)] text-[var(--text-primary)]",
-};
-
-
-export function Button ({
+export function Button({
   variant = "primary",
-  className = "",
-  ...props
-} : ButtonProps) {
-return (
-  <motion.button
-  whileHover={{ scale: 1.03 }}
-  whileTap={{ scale: 0.97 }}
-  className={`${baseClasses} ${variantClasses[variant]} ${className}`}
-  {...props}
-  />
-)};
+  children,
+  onClick,
+  style,
+}: ButtonProps) {
+  const variantStyles: Record<string, React.CSSProperties> = {
+    primary: {
+      background: "var(--accent-primary)",
+      color: "white",
+      border: "none",
+    },
+    secondary: {
+      background: "var(--accent-secondary)",
+      color: "var(--text-primary)",
+      border: "none",
+    },
+    ghost: {
+      background: "transparent",
+      color: "var(--accent-primary)",
+      border: "2px solid var(--accent-primary)",
+    },
+  };
+
+  return (
+    <motion.button
+      onClick={onClick}
+      whileHover={{ scale: 1.03 }}
+      whileTap={{ scale: 0.97 }}
+      style={{
+        padding: "10px 20px",
+        borderRadius: 8,
+        fontFamily: "Outfit",
+        fontWeight: 600,
+        fontSize: 14,
+        cursor: "pointer",
+        ...variantStyles[variant],
+        ...style,
+      }}
+    >
+      {children}
+    </motion.button>
+  );
+}
