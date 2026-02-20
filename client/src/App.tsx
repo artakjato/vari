@@ -9,7 +9,7 @@ function App() {
       <Route path="/style-guide" element={<StyleGuide />} />
     </Routes>
     </BrowserRouter>
-  ); 
+  )
 }
 
 export default App; 
