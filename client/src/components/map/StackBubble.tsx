@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import type { techStack } from "../../lib/types";
+import type { TechStack } from "../../lib/types";
 
 interface Props {
   stack: TechStack;
