@@ -3,8 +3,8 @@ import type { TechStack } from "../../lib/types";
 
 interface Props {
   stack: TechStack;
-  indez: number;
-  parentPositiom: { x: number; y: number }; //the parent district's center
+  index: number;
+  parentPosition: { x: number; y: number }; //the parent district's center
 }
 
 export function StackBubble({ stack, index, parentPosition }: Props) {
@@ -15,10 +15,10 @@ export function StackBubble({ stack, index, parentPosition }: Props) {
 
   return (
     <motion.g
-      transform={`translate(${x}, ${y})`}
-      style={{ cursor: "pointer" }}
-      initial={{ scale: 0, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
+  
+      initial={{ x, y, scale: 0, opacity: 0 }}
+      animate={{ x, y, scale: 1, opacity: 1 }}
+          style={{ cursor: "pointer" }}
       transition={{
         type: "spring",
         stiffness: 300,

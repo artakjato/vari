@@ -22,11 +22,10 @@ const y = parentPosition.y + offsetY;
 
 return (
   <motion.g
-  transform={`translate(${x}, ${y})`}
+  initial={{ x,y, scale: 0, opacity: 0 }}
+  animate={{ x,y, scale:1, opacity: 1 }}
       onClick={() => focusDistrict(district.slug)}
       style={{ cursor: 'pointer' }}
-      initial={{ scale: 0, opacity: 0 }}     // starts invisible and tiny
-      animate={{ scale: 1, opacity: 1 }}     // grows to full size
       transition={{
         type: 'spring',
         stiffness: 260,
