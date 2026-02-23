@@ -15,17 +15,17 @@ export function StackBubble({ stack, index, parentPosition }: Props) {
 
   return (
     <motion.g
-  
       initial={{ x, y, scale: 0, opacity: 0 }}
       animate={{ x, y, scale: 1, opacity: 1 }}
-          style={{ cursor: "pointer" }}
+      style={{ cursor: "pointer" }}
       transition={{
         type: "spring",
-        stiffness: 300,
-        damping: 20,
+        stiffness: 400,
+        damping: 17,
         delay: 0.2 + index * 0.08, // slight delay after districts appear
       }}
-      whileHover={{ scale: 1.15 }}
+      whileHover={{ scale: 1.08 }}
+      whileTap={{ scale: 0.95 }}
       onClick={() => window.open(stack.url, "_blank")} // opens tech docs in new tab
     >
       <circle r={20} fill="white" stroke="#E8DDD0" strokeWidth={1} />

@@ -1,6 +1,6 @@
-import { motion } from 'framer-motion';
-import type { Industry } from '../../lib/types';
-import { useMapStore } from '../../stores/mapStore';
+import { motion } from "framer-motion";
+import type { Industry } from "../../lib/types";
+import { useMapStore } from "../../stores/mapStore";
 
 interface Props {
   industry: Industry;
@@ -12,7 +12,7 @@ export function IndustryBubble({ industry, onClick }: Props) {
   const focusedSlug = useMapStore((state) => state.focusedIndustrySlug);
 
   // Determine this bubble's visual state
-  const isFocused = focusedSlug === industry.slug;      // user clicked THIS bubble
+  const isFocused = focusedSlug === industry.slug; // user clicked THIS bubble
   const isOtherFocused = focusedSlug !== null && !isFocused; // user clicked a DIFFERENT bubble
 
   return (
@@ -24,19 +24,28 @@ export function IndustryBubble({ industry, onClick }: Props) {
         // Focused bubble grows 2.5x; other bubbles shrink and fade out
         scale: isFocused ? 2.5 : isOtherFocused ? 0.6 : 1,
         opacity: isOtherFocused ? 0.15 : 1,
-        filter: isOtherFocused ? 'blur(2px)' : 'none',
+        filter: isOtherFocused ? "blur(2px)" : "none",
       }}
       onClick={onClick}
-      style={{ cursor: "pointer"}}
-      transition={{ type: 'spring', stiffness: 200, damping: 25 }}
-      whileHover={!focusedSlug ? { scale: 1.08 } : {}}    // only hover effect at zoom level 1
+      style={{ cursor: "pointer" }}
+      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+      whileHover={!focusedSlug ? { scale: 1.08 } : {}} // only hover effect at zoom level 1
       whileTap={!focusedSlug ? { scale: 0.95 } : {}}
     >
-      <circle r={80} fill={industry.color} opacity={0.9} />
+     <circle r={80} fill={industry.color} opacity={0.9} />
       <text textAnchor="middle" dy={-10} fill="white" fontSize={14} fontFamily="Outfit">
         {industry.name}
       </text>
-      <image href={industry.icon} x={-12} y={8} width={24} height={24} />
+
+      <motion.image
+        href={industry.icon}
+        x={-12}
+        y={8}
+        width={24}
+        height={24}
+        whileHover={!focusedSlug ? { rotate: [-5, 5, -5, 0] } : undefined}
+        transition={{ duration: 0.4 }}
+      />
     </motion.g>
   );
 }

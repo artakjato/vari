@@ -2,38 +2,57 @@
 
 :root {
   /* Core backgrounds*/
-     --bg-primary: #FDF6EE;
-     --bg-canvas: #FDF6EE; 
-     --bg-surface: #FFFFFF;
+  --bg-primary: #fdf6ee;
+  --bg-canvas: #fdf6ee;
+  --bg-surface: #ffffff;
 
   /*Text colors*/
-     --text-primary: #2C1810;
-     --text-secondary: #8B7355;
+  --text-primary: #2c1810;
+  --text-secondary: #8b7355;
 
   /*Brand accent colors*/
-     --accent-primary: #C76B28;
-     --accent-secondary: #E8A87C;
+  --accent-primary: #c76b28;
+  --accent-secondary: #e8a87c;
 
   /*Industry bubble colors (one per industry)*/
-     --industry-web: #D4845A;
-     --industry-mobile: #B8956A;
-     --industry-gaming: #C9A882;
-     --industry-data: #A89078;
-     --industry-security: #7B8FA1;
-     --industry-cloud: #5B8C5A;
-     --industry-devops: #C97B3D;
-     --industry-embeded: #8B6F47;
+  --industry-web: #d4845a;
+  --industry-mobile: #b8956a;
+  --industry-gaming: #c9a882;
+  --industry-data: #a89078;
+  --industry-security: #7b8fa1;
+  --industry-cloud: #5b8c5a;
+  --industry-devops: #c97b3d;
+  --industry-embeded: #8b6f47;
 
   /*Borders and feedback*/
-     --border-subtle: #E8DDD0;
-     --error: #D94444;
-     --success: #4A9D5B; 
-   }
+  --border-subtle: #e8ddd0;
+  --error: #d94444;
+  --success: #4a9d5b;
+}
 
-   body {
-     background-color: var(--bg-primary);
-     color: var(--text-primary);
-     font-family: 'Inter', sans-serif;
-   }
-   h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; }
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: "Inter", sans-serif;
+}
+h1,
+h2,
+h3,
+h4 {
+  font-family: "Outfit", sans-serif;
+}
 
+/*Braething animation for idle state*/
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+/* Apply in IndustryBubble as a CSS class when not focused */
+.bubble-idle {
+  animation: breathe 4s ease-in-out infinite;
+}
