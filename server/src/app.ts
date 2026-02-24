@@ -5,6 +5,7 @@ import { env } from "./config/env.js"; // uses our validated config!
 import dns from "node:dns";
 import mapRoutes from "./routes/map.ts";
 import roleRoutes from "./routes/roles.ts";
+import authRoutes from './routes/auth';
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(cors({ origin: env.CLIENT_URL }));
 app.use(express.json());
 app.use(mapRoutes);
 app.use(roleRoutes);
+app.use(authRoutes);
 
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
