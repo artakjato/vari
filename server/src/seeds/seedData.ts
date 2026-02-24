@@ -6,7 +6,6 @@ import { Role } from '../models/Role.ts';
 dotenv.config();
 
 const industries = [{
-    _id: "1",
     slug: "web-development",
     name: "Web Development",
     subtitle: "Building what people see",
@@ -34,7 +33,6 @@ const industries = [{
     ],
   },
   {
-    _id: "2",
     slug: "mobile-development",
     name: "Mobile Development",
     subtitle: "Apps in your pocket",
@@ -66,7 +64,6 @@ const industries = [{
     ],
   },
   {
-    _id: "3",
     slug: "gaming",
     name: "Gaming",
     subtitle: "Building virtual worlds",
@@ -93,7 +90,6 @@ const industries = [{
     ],
   },
   {
-    _id: "4",
     slug: "data-ai",
     name: "Data & AI",
     subtitle: "Turning data into decisions",
@@ -118,7 +114,6 @@ const industries = [{
     ],
   },
   {
-    _id: "5",
     slug: "cybersecurity",
     name: "Cybersecurity",
     subtitle: "Protecting systems & data",
@@ -142,7 +137,6 @@ const industries = [{
     ],
   },
   {
-    _id: "6",
     slug: "cloud-infrastructure",
     name: "Cloud & Infra",
     subtitle: "The invisible backbone",
@@ -162,7 +156,6 @@ const industries = [{
     ],
   },
   {
-    _id: "7",
     slug: "devops",
     name: "DevOps",
     subtitle: "Ship faster, break less",
@@ -189,7 +182,6 @@ const industries = [{
     ],
   },
   {
-    _id: "8",
     slug: "embedded-systems",
     name: "Embedded Systems",
     subtitle: "Code meets hardware",
@@ -218,7 +210,6 @@ const industries = [{
 ];
 const roles = [// Web
   {
-    _id: "r1",
     slug: "fullstack-engineer",
     name: "Full-Stack Engineer",
     description: "Builds both frontend and backend systems. Versatile but must stay current on many technologies.",
@@ -226,7 +217,6 @@ const roles = [// Web
     tradeoffs: ["High versatility", "Jack of all trades risk", "Strong job market"],
   },
   {
-    _id: "r2",
     slug: "frontend-engineer",
     name: "Frontend Engineer",
     description: "Specializes in user interfaces, accessibility, and browser performance.",
@@ -234,7 +224,6 @@ const roles = [// Web
     tradeoffs: ["Creative expression", "Rapid framework churn", "Visual impact"],
   },
   {
-    _id: "r3",
     slug: "backend-engineer",
     name: "Backend Engineer",
     description: "Designs APIs, databases, and server logic that power applications.",
@@ -244,7 +233,6 @@ const roles = [// Web
 
   // Mobile
   {
-    _id: "r4",
     slug: "ios-developer",
     name: "iOS Developer",
     description: "Builds native Apple apps using Swift and SwiftUI for iPhone and iPad.",
@@ -252,7 +240,6 @@ const roles = [// Web
     tradeoffs: ["Apple ecosystem lock-in", "Premium market", "Great developer tools"],
   },
   {
-    _id: "r5",
     slug: "android-developer",
     name: "Android Developer",
     description: "Creates apps for the Android platform using Kotlin and Jetpack Compose.",
@@ -262,7 +249,6 @@ const roles = [// Web
 
   // Data & AI
   {
-    _id: "r6",
     slug: "ml-engineer",
     name: "ML Engineer",
     description: "Builds and deploys machine learning models into production systems.",
@@ -272,7 +258,6 @@ const roles = [// Web
 
   // DevOps
   {
-    _id: "r7",
     slug: "devops-engineer",
     name: "DevOps Engineer",
     description: "Automates deployments, manages infrastructure, and ensures system reliability.",
@@ -282,7 +267,6 @@ const roles = [// Web
 
   // Cybersecurity
   {
-    _id: "r8",
     slug: "security-analyst",
     name: "Security Analyst",
     description: "Monitors and protects systems from cyber threats and vulnerabilities.",
@@ -292,7 +276,6 @@ const roles = [// Web
 
   // Gaming
   {
-    _id: "r9",
     slug: "gameplay-engineer",
     name: "Gameplay Engineer",
     description: "Implements core game mechanics, player controls, and moment-to-moment feel.",
@@ -300,7 +283,6 @@ const roles = [// Web
     tradeoffs: ["Highly creative", "Constant iteration", "Hard to test objectively"],
   },
   {
-    _id: "r10",
     slug: "engine-programmer",
     name: "Engine Programmer",
     description: "Builds rendering, physics, streaming, and performance-critical engine systems.",
@@ -308,7 +290,6 @@ const roles = [// Web
     tradeoffs: ["Deep technical work", "Low-level complexity", "Performance pressure"],
   },
   {
-    _id: "r11",
     slug: "online-systems-engineer",
     name: "Online Systems Engineer",
     description: "Designs matchmaking, multiplayer services, and live game backend systems.",
@@ -318,7 +299,6 @@ const roles = [// Web
 
   // Cloud & Infra (fix: use the kept slug)
   {
-    _id: "r12",
     slug: "site-reliability-engineer",
     name: "Site Reliability Engineer",
     description: "Keeps services healthy through SLOs, incident response, and resilience engineering.",
@@ -326,7 +306,6 @@ const roles = [// Web
     tradeoffs: ["Clear impact", "Pager fatigue risk", "Requires strong fundamentals"],
   },
   {
-    _id: "r13",
     slug: "platform-engineer",
     name: "Platform Engineer",
     description: "Builds internal platforms and paved roads so product teams can move fast safely.",
@@ -334,7 +313,6 @@ const roles = [// Web
     tradeoffs: ["Multiplier effect", "Internal customer politics", "Long payoff cycles"],
   },
   {
-    _id: "r14",
     slug: "cloud-devops-engineer", // renamed to avoid duplicate slug with r7
     name: "Cloud DevOps Engineer",
     description: "Automates build, deploy, and infrastructure workflows to ship reliably in cloud environments.",
@@ -344,7 +322,6 @@ const roles = [// Web
 
   // Embedded Systems
   {
-    _id: "r15",
     slug: "firmware-engineer",
     name: "Firmware Engineer",
     description: "Writes and debugs low-level code that runs directly on devices and microcontrollers.",
@@ -352,7 +329,6 @@ const roles = [// Web
     tradeoffs: ["Close to hardware", "Debugging can be brutal", "Constraints everywhere"],
   },
   {
-    _id: "r16",
     slug: "embedded-software-engineer",
     name: "Embedded Software Engineer",
     description: "Builds device features, drivers, and integrations across firmware and system layers.",
@@ -360,7 +336,6 @@ const roles = [// Web
     tradeoffs: ["Broad scope", "Hardware dependencies", "Slower iteration loops"],
   },
   {
-    _id: "r17",
     slug: "iot-engineer",
     name: "IoT Engineer",
     description: "Connects devices to cloud services, handles telemetry, updates, and security concerns.",
