@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { Industry, Role, Pin } from '../lib/types';
+import { fetchMapData } from '../lib/api';
 
 interface MapState {
   industries: Industry[];
@@ -34,29 +35,35 @@ export const useMapStore = create<MapState>((set) => ({
 industries: [],
 roles: [],
 loading: false,
-error: null,
+error: null as string | null, 
+
 zoomLevel: 1,
 focusedIndustrySlug: null,
 focusedDistrictSlug: null,
 selectedRoleSlug: null,
 inspectorOpen: false,
 breadcrumbs: ['All Industries'],
+
 currentUser: null,
 pins: [],
 
 /*Action implementation*/
 setZoomLevel: (level) => set({ zoomLevel: level }),
+
 focusIndustry: (slug) => set({
   focusedIndustrySlug: slug,
   zoomLevel: 2,
-  breadcrumbs: ['All Industries', slug],
+  breadcrumbs: ['All industries', slug],
 }),
+
 focusDistrict: (slug) => set((state) => ({
-  focusedIndustrySlug: slug,
+  focusedDistrictSlug: slug,
   zoomLevel: 3,
   breadcrumbs: [...state.breadcrumbs, slug],
 })), 
+
 selectRole: (slug) => set({ selectedRoleSlug: slug, inspectorOpen: true }),
+
 resetMap: () => set ({
   focusedIndustrySlug: null,
   focusedDistrictSlug: null,
@@ -64,9 +71,22 @@ resetMap: () => set ({
   breadcrumbs: ['All industries'],
   inspectorOpen: false, 
 }), 
+
 addPin: (pin) => set((state) => ({ pins: [...state.pins, pin] })), 
+
 removePin: (id) => set((state) => ({ pins: state.pins.filter(p => p._id !==id)})),
+
+loadMapData: async () => {
+  set({ loading: true, error: null });
+  try {
+    const { data } = await fetchMapData();
+    set({ industries: data.industries, roles: data.roles, loading: false });
+  } catch (err) {
+    set({ error: 'Failed to load map data. Is the server running?', loading: false });
+  }
+},
 })); 
+
 
 export const useFocusedIndustry = () => {
   const { industries, focusedIndustrySlug } = useMapStore();
