@@ -3,10 +3,15 @@ import { useMapStore } from "../../stores/mapStore";
 import { X } from "lucide-react";
 import { seedData } from "../../data/seedData";
 import { NearThisPanel } from './NearThisPanel';
+import { createPin } from '../../lib/api';
 
 export function InspectorPanel() {
   const { inspectorOpen, selectedRoleSlug, selectRole } = useMapStore();
   const role = seedData.roles.find((r) => r.slug === selectedRoleSlug);
+  const handlePin = async () => {
+  await createPin({ targetType: 'role', targetId: role._id });
+  // Optionally show a toast: "Saved to your pins ⭐"
+};
 
   const close = () => useMapStore.setState({ inspectorOpen: false });
 
@@ -43,6 +48,7 @@ export function InspectorPanel() {
             <div key={t}>• {t}</div>
           ))}
           <NearThisPanel currentRoleSlug={role.slug} industrySlug={role.industrySlug} />
+          <button onClick={handlePin}>⭐ Pin this role</button>
         </motion.div>
       )}
     </AnimatePresence>
