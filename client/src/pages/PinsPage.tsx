@@ -20,16 +20,16 @@ export function PinsPage() {
   useEffect(() => {
     getPins()
       .then((res) => setPins(res.data))
-      .catch(() => setPins([])) // if not logged in, show empty
+      .catch(() => setPins([]))
       .finally(() => setLoading(false));
   }, []);
 
-  // Helper: look up the display name of a pinned item
   const resolveName = (pin: Pin): string => {
     if (pin.targetType === "role") {
       const role = roles.find((r) => r.slug === pin.targetId);
       return role?.name ?? pin.targetId;
     }
+
     const industry = industries.find((ind) => ind.slug === pin.targetId);
     return industry?.name ?? pin.targetId;
   };
@@ -67,7 +67,7 @@ export function PinsPage() {
       }}
     >
       <h1 style={{ fontFamily: "Outfit", fontSize: 28, marginBottom: 24 }}>
-        My Saved Pins ⭐
+        My Saved Pins
       </h1>
       {pins.length === 0 ? (
         <p style={{ color: "var(--text-secondary)", fontFamily: "Inter" }}>
@@ -83,7 +83,7 @@ export function PinsPage() {
             <PinCard
               key={pin._id}
               pin={pin}
-              displayName={resolveName(pin)}
+              name={resolveName(pin)}
               onDelete={handleDelete}
             />
           ))}

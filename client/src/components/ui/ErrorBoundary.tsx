@@ -1,4 +1,5 @@
-import { Component, ReactNode } from "react";
+import { Component } from "react";
+import type { ReactNode } from "react";
 
 // Note: Error boundaries MUST be class components (React limitation)
 export class ErrorBoundary extends Component<

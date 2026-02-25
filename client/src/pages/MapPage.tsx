@@ -30,11 +30,10 @@ export function MapPage() {
 
   return (
     <div style={{ position: "relative", width: "100vw", height: "100vh" }}>
-      {/* Top-right user / sign-in */}
       <div style={{ position: "absolute", top: 16, right: 16, zIndex: 10 }}>
         {currentUser ? (
           <span style={{ fontFamily: "Outfit" }}>
-            👤 {currentUser.displayName}
+            User: {currentUser.displayName}
           </span>
         ) : (
           <Link to="/auth">

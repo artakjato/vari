@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import type { Industry, Role, Pin } from '../lib/types';
 import { fetchMapData } from '../lib/api';
+import { seedData } from '../data/seedData';
 
 interface MapState {
   industries: Industry[];
@@ -28,6 +29,7 @@ interface MapState {
   resetMap: () => void;
   addPin: (pin: Pin) => void;
   removePin: (id: string) => void;
+  loadMapData: () => Promise<void>;
 }
 
 export const useMapStore = create<MapState>((set) => ({
@@ -82,7 +84,13 @@ loadMapData: async () => {
     const { data } = await fetchMapData();
     set({ industries: data.industries, roles: data.roles, loading: false });
   } catch (err) {
-    set({ error: 'Failed to load map data. Is the server running?', loading: false });
+    console.warn('Map API unavailable, falling back to local seed data.', err);
+    set({
+      industries: seedData.industries,
+      roles: seedData.roles,
+      error: null,
+      loading: false,
+    });
   }
 },
 })); 

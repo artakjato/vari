@@ -2,7 +2,6 @@
 import { IndustryBubble } from "./IndustryBubble";
 import { DistrictBubble } from "./DistrictBubble";
 import { StackBubble } from "./StackBubble";
-import { ConnectionLine } from "./ConnectionLine";
 import { useMapStore } from "../../stores/mapStore";
 import { seedData } from "../../data/seedData";
 

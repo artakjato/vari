@@ -2,16 +2,17 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useMapStore } from "../../stores/mapStore";
 import { X } from "lucide-react";
 import { seedData } from "../../data/seedData";
-import { NearThisPanel } from './NearThisPanel';
-import { createPin } from '../../lib/api';
+import { NearThisPanel } from "./NearThisPanel";
+import { createPin } from "../../lib/api";
 
 export function InspectorPanel() {
-  const { inspectorOpen, selectedRoleSlug, selectRole } = useMapStore();
+  const { inspectorOpen, selectedRoleSlug } = useMapStore();
   const role = seedData.roles.find((r) => r.slug === selectedRoleSlug);
+
   const handlePin = async () => {
-  await createPin({ targetType: 'role', targetId: role._id });
-  // Optionally show a toast: "Saved to your pins ⭐"
-};
+    if (!role) return;
+    await createPin({ targetType: "role", targetId: role.slug });
+  };
 
   const close = () => useMapStore.setState({ inspectorOpen: false });
 
@@ -19,9 +20,9 @@ export function InspectorPanel() {
     <AnimatePresence>
       {inspectorOpen && role && (
         <motion.div
-          initial={{ x: "100%" }} // starts off-screen to the right
-          animate={{ x: 0 }} // slides to its natural position
-          exit={{ x: "100%" }} // slides back out when closing
+          initial={{ x: "100%" }}
+          animate={{ x: 0 }}
+          exit={{ x: "100%" }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
           style={{
             position: "absolute",
@@ -45,10 +46,13 @@ export function InspectorPanel() {
           <p style={{ color: "var(--text-secondary)" }}>{role.description}</p>
           <h3>Trade-offs</h3>
           {role.tradeoffs.map((t) => (
-            <div key={t}>• {t}</div>
+            <div key={t}>- {t}</div>
           ))}
-          <NearThisPanel currentRoleSlug={role.slug} industrySlug={role.industrySlug} />
-          <button onClick={handlePin}>⭐ Pin this role</button>
+          <NearThisPanel
+            currentRoleSlug={role.slug}
+            industrySlug={role.industrySlug}
+          />
+          <button onClick={handlePin}>Pin this role</button>
         </motion.div>
       )}
     </AnimatePresence>
