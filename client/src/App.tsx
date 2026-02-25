@@ -5,6 +5,7 @@ import { AuthPage } from "./pages/AuthPage";
 
 import { useEffect } from "react";
 import { useMapStore } from "./stores/mapStore";
+import { HomePage } from './pages/HomePage';
 
 function App() {
   const loadMapData = useMapStore((s) => s.loadMapData);
@@ -31,6 +32,7 @@ function App() {
         <Route path="/style-guide" element={<StyleGuide />} />
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/pins" element={<PinsPage />} />
+        <Route path="/" element={<HomePage />} />
       </Routes>
     </BrowserRouter>
   );
