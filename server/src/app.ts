@@ -6,6 +6,8 @@ import dns from "node:dns";
 import mapRoutes from "./routes/map.ts";
 import roleRoutes from "./routes/roles.ts";
 import authRoutes from './routes/auth';
+import pinRoutes from './routes/pins';
+import searchRoutes from './routes/search';
 
 const app = express();
 
@@ -14,6 +16,8 @@ app.use(express.json());
 app.use(mapRoutes);
 app.use(roleRoutes);
 app.use(authRoutes);
+app.use(pinRoutes);
+app.use(searchRoutes);
 
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
@@ -22,4 +26,4 @@ dns.setServers(["1.1.1.1", "8.8.8.8"]);
 app.listen(env.PORT, async () => {
   await connectDB(env.MONGODB_URI);
   console.log(`🚀 Server running on port ${env.PORT}`);
-});
+}); 
