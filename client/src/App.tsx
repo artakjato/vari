@@ -6,6 +6,7 @@ import { AuthPage } from "./pages/AuthPage";
 import { useEffect } from "react";
 import { useMapStore } from "./stores/mapStore";
 import { HomePage } from './pages/HomePage';
+import { ErrorBoundary } from './components/ui/ErrorBoundary';
 
 function App() {
   const loadMapData = useMapStore((s) => s.loadMapData);
@@ -17,6 +18,7 @@ function App() {
   }, []); // [] means run once on first render
 
   return (
+    <ErrorBoundary>
     <BrowserRouter>
       <Routes>
         <Route
@@ -35,6 +37,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
       </Routes>
     </BrowserRouter>
+    </ErrorBoundary>
   );
 }
 
