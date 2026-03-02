@@ -5,25 +5,23 @@ import { useMapStore } from "../../stores/mapStore";
 interface Props {
   district: District;
   index: number;
-  parentPosition: { x: number; y: number };
+  position: { x: number; y: number };
   color: string;
 }
 
 export function DistrictBubble({
   district,
   index,
-  parentPosition,
+  position,
   color,
 }: Props) {
   const focusDistrict = useMapStore((state) => state.focusDistrict);
 
-  //positioning each district in a circle around the parent
-  //angle = spread them evenly; sidtance = 150px from parent center
-  const angle = index * (360 / 3) * (Math.PI / 180); //adjust divisor to match district count
-  const offsetX = Math.cos(angle) * 150;
-  const offsetY = Math.sin(angle) * 150;
-  const x = parentPosition.x + offsetX;
-  const y = parentPosition.y + offsetY;
+  const { x, y } = position;
+
+  const w = Math.max(120, district.name.length * 7.5 + 40);
+  const r = 20;
+  const hw = w / 2 - r;
 
   return (
     <motion.g
@@ -35,12 +33,17 @@ export function DistrictBubble({
         type: "spring",
         stiffness: 400,
         damping: 17,
-        delay: index * 0.1, // each district appears 0.1s after the previous
+        delay: index * 0.1,
       }}
-      whileHover={{ scale: 1.08 }}
+      whileHover={{ scale: 1.05, filter: "drop-shadow(0px 8px 12px rgba(0,0,0,0.15))" }}
       whileTap={{ scale: 0.95 }}
     >
-      <circle r={40} fill={color} opacity={0.8} />
+      <path
+        d={`M ${-hw},${-r} H ${hw} A ${r} ${r} 0 0 1 ${hw} ${r} H 15 L 5 ${r + 10} L -5 ${r} H ${-hw} A ${r} ${r} 0 0 1 ${-hw} ${-r} Z`}
+        fill="white"
+        stroke={color}
+        strokeWidth={1.5}
+      />
       <text
         textAnchor="middle"
         dy={4}

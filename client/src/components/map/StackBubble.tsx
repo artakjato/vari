@@ -4,14 +4,15 @@ import type { TechStack } from "../../lib/types";
 interface Props {
   stack: TechStack;
   index: number;
-  parentPosition: { x: number; y: number }; //the parent district's center
+  position: { x: number; y: number };
 }
 
-export function StackBubble({ stack, index, parentPosition }: Props) {
-  // Position stacks in a small circle around the district
-  const angle = index * (360 / 4) * (Math.PI / 180);
-  const x = parentPosition.x + Math.cos(angle) * 80;
-  const y = parentPosition.y + Math.sin(angle) * 80;
+export function StackBubble({ stack, index, position }: Props) {
+  const { x, y } = position;
+
+  const w = Math.max(100, stack.name.length * 7.5 + 40);
+  const r = 16;
+  const hw = w / 2 - r;
 
   return (
     <motion.g
@@ -22,21 +23,22 @@ export function StackBubble({ stack, index, parentPosition }: Props) {
         type: "spring",
         stiffness: 400,
         damping: 17,
-        delay: 0.2 + index * 0.08, // slight delay after districts appear
+        delay: 0.2 + index * 0.08,
       }}
-      whileHover={{ scale: 1.08 }}
+      whileHover={{ scale: 1.1, filter: "drop-shadow(0px 4px 6px rgba(0,0,0,0.1))" }}
       whileTap={{ scale: 0.95 }}
-      onClick={() => window.open(stack.url, "_blank")} // opens tech docs in new tab
+      onClick={() => window.open(stack.url, "_blank")}
     >
-      <circle r={20} fill="white" stroke="#E8DDD0" strokeWidth={1} />
-      <image href={stack.icon} x={-10} y={-10} width={20} height={20} />
-      {/* Name label below the circle */}
+      <path
+        d={`M ${-hw},${-r} H ${hw} A ${r} ${r} 0 0 1 ${hw} ${r} H 15 L 5 ${r + 10} L -5 ${r} H ${-hw} A ${r} ${r} 0 0 1 ${-hw} ${-r} Z`}
+        fill="#A37554"
+      />
       <text
         textAnchor="middle"
-        y={32}
-        fill="var(--text-secondary)"
-        fontSize={9}
-        fontFamily="Inter"
+        dy={4}
+        fill="white"
+        fontSize={11}
+        fontFamily="Outfit"
       >
         {stack.name}
       </text>
