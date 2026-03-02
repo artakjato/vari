@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { useMapStore } from "../../stores/mapStore";
 
-//the results come from Fuse.js - each has a '.item' with the actual data
 interface SearchResult {
   item: {
     type: "industry" | "role";
     slug: string;
     name: string;
-    color?: string; // industries have a color
-    industrySlug?: string; // roles have an industrySlug
+    color?: string;
+    industrySlug?: string;
   };
 }
 
@@ -18,82 +17,58 @@ interface Props {
 
 export function SearchResults({ results }: Props) {
   const { focusIndustry, selectRole } = useMapStore();
-  const [activeIndex, setActiveIndex] = useState(0); // keyboard selection
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  const handleClick = (result: SearchResult["item"]) => {
+  const handleSelect = (result: SearchResult["item"]) => {
     if (result.type === "industry") {
-      focusIndustry(result.slug); // zoom into the industry on the map
-    } else {
-      selectRole(result.slug); // open the inspector panel for this role
+      focusIndustry(result.slug);
+      return;
     }
+
+    selectRole(result.slug);
   };
 
-  // Handle keyboard navigation (ArrowUp, ArrowDown, Enter)
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setActiveIndex((prev) => Math.min(prev + 1, results.length - 1));
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setActiveIndex((prev) => Math.max(prev - 1, 0));
-    } else if (e.key === "Enter" && results[activeIndex]) {
-      handleClick(results[activeIndex].item);
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      setActiveIndex((current) => Math.min(current + 1, results.length - 1));
+    }
+
+    if (event.key === "ArrowUp") {
+      event.preventDefault();
+      setActiveIndex((current) => Math.max(current - 1, 0));
+    }
+
+    if (event.key === "Enter" && results[activeIndex]) {
+      handleSelect(results[activeIndex].item);
     }
   };
 
   return (
     <div
+      tabIndex={0}
       onKeyDown={handleKeyDown}
-      tabIndex={0} // makes this div focusable so it can receive keyboard events
-      style={{
-        position: "absolute",
-        top: "100%", // appears directly below the search bar
-        left: 0,
-        right: 0,
-        marginTop: 4,
-        background: "var(--bg-surface)",
-        border: "1px solid var(--border-subtle)",
-        borderRadius: 12,
-        boxShadow: "0 4px 16px rgba(0, 0, 0, 0.08)",
-        overflow: "hidden",
-      }}
+      className="absolute left-0 right-0 top-full z-30 mt-1 overflow-hidden rounded-2xl border border-border/85 bg-card shadow-[0_10px_26px_rgba(67,40,17,0.12)]"
     >
-      {results.map((result, i) => (
-        <div
-          key={result.item.slug}
-          onClick={() => handleClick(result.item)}
-          style={{
-            padding: "10px 16px",
-            display: "flex",
-            alignItems: "center",
-            gap: 10,
-            cursor: "pointer",
-            background: i === activeIndex ? "var(--bg-primary)" : "transparent", // highlight active
-            borderBottom:
-              i < results.length - 1
-                ? "1px solid var(--border-subtle)"
-                : "none",
-          }}
+      {results.map((result, index) => (
+        <button
+          key={`${result.item.type}-${result.item.slug}`}
+          onClick={() => handleSelect(result.item)}
+          className={`flex w-full items-center gap-3 border-b border-border/80 px-3 py-2 text-left last:border-b-0 ${
+            index === activeIndex ? "bg-[#fff2e1]" : "bg-card"
+          }`}
         >
-          {/* Colored dot: shows the industry color */}
-          <div
-            style={{
-              width: 8,
-              height: 8,
-              borderRadius: "50%",
-              background: result.item.color || "var(--accent-primary)",
-            }}
+          <span
+            className="h-2 w-2 rounded-full"
+            style={{ background: result.item.color ?? "var(--accent-primary)" }}
           />
-          {/* Result name and type label */}
-          <div>
-            <div style={{ fontFamily: "Inter", fontSize: 13, fontWeight: 500 }}>
-              {result.item.name}
-            </div>
-            <div style={{ fontSize: 11, color: "var(--text-secondary)" }}>
-              {result.item.type === "industry" ? "Industry" : "Role"}
-            </div>
-          </div>
-        </div>
+          <span>
+            <span className="block text-sm font-semibold text-[#1a2740]">{result.item.name}</span>
+            <span className="block text-[11px] uppercase tracking-[0.12em] text-[#8d7258]">
+              {result.item.type}
+            </span>
+          </span>
+        </button>
       ))}
     </div>
   );
