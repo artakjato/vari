@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const pinSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   targetType: { type: String, enum: ['role', 'industry'], required: true },
-  targetId: { type: String, required: true },   // slug of the pinned role/industry
+  targetId: { type: String, required: true },
   notes: { type: String, default: '' },
 }, { timestamps: true });
 
