@@ -1,16 +1,14 @@
 import { Router } from 'express';
 import rateLimit from 'express-rate-limit';
-import { User } from '../models/User';
-import { hashPassword, comparePassword, generateToken } from '../services/authService';
-import { requireAuth } from '../middleware/auth';
+import { requireAuth } from '../middleware/auth.js';
+import { User } from '../models/User.js';
+import { comparePassword, generateToken, hashPassword } from '../services/authService.js';
 
 const router = Router();
 
-// Rate limit auth routes: max 10 attempts per 15 minutes per IP
-// This prevents brute-force password guessing attacks
 const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,  // 15 minutes
-  max: 10,                    // limit each IP to 10 requests per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 10,
   message: { error: 'Too many attempts, please try again later' },
 });
 

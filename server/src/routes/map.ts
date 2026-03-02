@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { Industry } from '../models/Industry.ts';
-import { Role } from '../models/Role.ts';
+import { Industry } from '../models/Industry.js';
+import { Role } from '../models/Role.js';
 
 const router = Router();
 

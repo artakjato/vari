@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { Industry } from '../models/Industry';
-import { Role } from '../models/Role';
+import { Industry } from '../models/Industry.js';
+import { Role } from '../models/Role.js';
 
 const router = Router();
 
@@ -8,7 +8,7 @@ router.get('/api/search', async (req, res) => {
   const q = req.query.q as string;
   if (!q || q.length < 2) return res.json({ results: [] });
 
-  const regex = new RegExp(q, 'i');  // case-insensitive partial match
+  const regex = new RegExp(q, 'i');
   const [industries, roles] = await Promise.all([
     Industry.find({ name: regex }, 'name slug color'),
     Role.find({ name: regex }, 'name slug industrySlug'),

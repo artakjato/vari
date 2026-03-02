@@ -1,9 +1,8 @@
 import { Router } from 'express';
-import { Role } from '../models/Role';
+import { Role } from '../models/Role.js';
 
 const router = Router();
 
-// GET /api/roles/:slug — returns one role's full data
 router.get('/api/roles/:slug', async (req, res) => {
   try {
     const role = await Role.findOne({ slug: req.params.slug });
