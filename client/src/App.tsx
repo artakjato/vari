@@ -1,13 +1,13 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { MapPage } from "./pages/MapPage";
-import { StyleGuide } from "./pages/StyleGuide";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { AuthPage } from "./pages/AuthPage";
+import { MapPage } from "./pages/MapPage";
 import { PinsPage } from "./pages/PinsPage";
+import { StyleGuide } from "./pages/StyleGuide";
 
 import { useEffect } from "react";
-import { useMapStore } from "./stores/mapStore";
-import { HomePage } from "./pages/HomePage";
 import { ErrorBoundary } from "./components/ui/ErrorBoundary";
+import { HomePage } from "./pages/HomePage";
+import { useMapStore } from "./stores/mapStore";
 
 function App() {
   const loadMapData = useMapStore((s) => s.loadMapData);

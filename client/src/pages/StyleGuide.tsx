@@ -1,38 +1,53 @@
-import { Button } from "../components/ui/Button";
-import { Badge } from "../components/ui/Badge";
-import { Card } from "../components/ui/Card";
-import { Tooltip } from "../components/ui/Tooltip";
+import { Badge } from '../components/ui/Badge';
+import { Button } from '../components/ui/Button';
+import { Card, CardContent } from '../components/ui/Card';
+import { Tooltip } from '../components/ui/Tooltip';
 
 export function StyleGuide() {
-  return (
-    <div style={{ padding: 32, maxWidth: 600, margin: "0 auto" }}>
-      <h1>Vari Style Guide</h1>
-      <p style={{ color: "var(--text-secondary)", marginBottom: 32 }}>
-        All reusable UI component in one piece
-      </p>
+	return (
+		<div className="mx-auto max-w-3xl space-y-8 px-6 py-10">
+			<div className="space-y-1">
+				<h1 className="text-3xl text-foreground">Vari Style Guide</h1>
+				<p className="text-sm text-muted-foreground">Reusable warm-theme components and interaction states.</p>
+			</div>
 
-      {/* Buttons */}
-      <h2>Buttons</h2>
-      <div style={{ display: "flex", gap: 8, marginBottom: 24 }}>
-        <Badge color="#D4845A">Web Dev</Badge>
-        <Badge color="#B8956A">Mobile</Badge>
-        <Badge color="#7B8FA1">Security</Badge>
-      </div>
+			<section className="space-y-3">
+				<h2 className="text-lg font-semibold text-foreground">Buttons</h2>
+				<div className="flex flex-wrap gap-2">
+					<Button>Primary</Button>
+					<Button variant="outline">Outline</Button>
+					<Button variant="secondary">Secondary</Button>
+					<Button variant="ghost">Ghost</Button>
+				</div>
+			</section>
 
-      {/* Card */}
-      <h2>Card</h2>
-      <Card>
-        <h3 style={{ margin: 0 }}>This is a card</h3>
-        <p style={{ color: "var(--text-secondary)" }}>
-          Cards are white containers used throughout the app
-        </p>
-      </Card>
+			<section className="space-y-3">
+				<h2 className="text-lg font-semibold text-foreground">Badges</h2>
+				<div className="flex flex-wrap gap-2">
+					<Badge>Default</Badge>
+					<Badge variant="outline" className="border-[#e6ccb0] bg-[#fff3e3] text-[#876f57]">
+						Category
+					</Badge>
+					<Badge variant="secondary">Secondary</Badge>
+				</div>
+			</section>
 
-      {/* Tooltip */}
-      <h2 style={{ marginTop: 24 }}>Tooltip</h2>
-      <Tooltip text="I'm a tooltip!">
-        <Button variant="secondary">Hover over me</Button>
-      </Tooltip>
-    </div>
-  );
+			<section className="space-y-3">
+				<h2 className="text-lg font-semibold text-foreground">Card</h2>
+				<Card>
+					<CardContent className="space-y-2">
+						<h3 className="text-base font-semibold text-foreground">Roadmap card sample</h3>
+						<p className="text-sm text-muted-foreground">Cards use warm borders, elevated white surfaces, and strong text contrast.</p>
+					</CardContent>
+				</Card>
+			</section>
+
+			<section className="space-y-3">
+				<h2 className="text-lg font-semibold text-foreground">Tooltip</h2>
+				<Tooltip text="Contextual helper tooltip">
+					<Button variant="outline">Hover me</Button>
+				</Tooltip>
+			</section>
+		</div>
+	);
 }

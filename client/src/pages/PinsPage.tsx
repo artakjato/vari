@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { PinCard } from "../components/pins/PinCard";
 import { getPins } from "../lib/api";
 import { useMapStore } from "../stores/mapStore";
-import { PinCard } from "../components/pins/PinCard";
 
 interface Pin {
   _id: string;
@@ -13,82 +14,68 @@ interface Pin {
 export function PinsPage() {
   const [pins, setPins] = useState<Pin[]>([]);
   const [loading, setLoading] = useState(true);
-  const industries = useMapStore((s) => s.industries);
-  const roles = useMapStore((s) => s.roles);
-  const currentUser = useMapStore((s) => s.currentUser);
+
+  const industries = useMapStore((state) => state.industries);
+  const roles = useMapStore((state) => state.roles);
+  const currentUser = useMapStore((state) => state.currentUser);
 
   useEffect(() => {
     getPins()
-      .then((res) => setPins(res.data))
+      .then((response) => setPins(response.data))
       .catch(() => setPins([]))
       .finally(() => setLoading(false));
   }, []);
 
-  const resolveName = (pin: Pin): string => {
+  const resolveName = (pin: Pin) => {
     if (pin.targetType === "role") {
-      const role = roles.find((r) => r.slug === pin.targetId);
+      const role = roles.find((item) => item.slug === pin.targetId);
       return role?.name ?? pin.targetId;
     }
 
-    const industry = industries.find((ind) => ind.slug === pin.targetId);
+    const industry = industries.find((item) => item.slug === pin.targetId);
     return industry?.name ?? pin.targetId;
-  };
-
-  const handleDelete = (id: string) => {
-    setPins((prev) => prev.filter((p) => p._id !== id));
   };
 
   if (!currentUser) {
     return (
-      <div
-        style={{
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "var(--bg-canvas)",
-        }}
-      >
-        <p style={{ fontFamily: "Inter", color: "var(--text-secondary)" }}>
-          Please <a href="/auth">sign in</a> to view your saved pins.
+      <div className="flex min-h-screen items-center justify-center bg-background px-4 sm:px-6">
+        <p className="text-[13px] text-muted-foreground sm:text-sm">
+          Please <Link to="/auth" className="font-medium text-foreground hover:underline">sign in</Link> to view saved pins.
         </p>
       </div>
     );
   }
 
-  if (loading) return <p style={{ padding: 40 }}>Loading your pins...</p>;
+  if (loading) {
+    return <p className="px-4 py-8 text-[13px] font-medium text-muted-foreground sm:px-6 sm:text-sm">Loading your pins...</p>;
+  }
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        padding: "40px 24px",
-        background: "var(--bg-canvas)",
-      }}
-    >
-      <h1 style={{ fontFamily: "Outfit", fontSize: 28, marginBottom: 24 }}>
-        My Saved Pins
-      </h1>
-      {pins.length === 0 ? (
-        <p style={{ color: "var(--text-secondary)", fontFamily: "Inter" }}>
-          You haven't pinned any roles or industries yet. Explore the
-          <a href="/map" style={{ marginLeft: 4 }}>
-            map
-          </a>{" "}
-          and click "Pin" on things you find interesting!
-        </p>
-      ) : (
-        <div style={{ display: "grid", gap: 16, maxWidth: 600 }}>
-          {pins.map((pin) => (
-            <PinCard
-              key={pin._id}
-              pin={pin}
-              name={resolveName(pin)}
-              onDelete={handleDelete}
-            />
-          ))}
-        </div>
-      )}
+    <div className="min-h-screen bg-background px-4 py-8 sm:px-6 sm:py-10 md:px-10 md:py-12">
+      <div className="mx-auto w-full max-w-3xl space-y-3.5 sm:space-y-4">
+        <h1 className="text-[1.75rem] leading-tight text-foreground sm:text-3xl">My saved pins</h1>
+
+        {!pins.length ? (
+          <p className="text-[13px] text-muted-foreground sm:text-sm">
+            You have not pinned roles or industries yet. Explore the{" "}
+            <Link to="/map" className="font-medium text-foreground hover:underline">
+              map
+            </Link>
+            .
+          </p>
+        ) : (
+          <div className="space-y-2.5 sm:space-y-3">
+            {pins.map((pin) => (
+              <PinCard
+                key={pin._id}
+                pin={pin}
+                name={resolveName(pin)}
+                onDelete={(id) => setPins((items) => items.filter((item) => item._id !== id))}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
