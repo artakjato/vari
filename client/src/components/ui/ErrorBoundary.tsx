@@ -1,7 +1,7 @@
+import { Button } from "@/components/ui/Button";
 import { Component } from "react";
 import type { ReactNode } from "react";
 
-// Note: Error boundaries MUST be class components (React limitation)
 export class ErrorBoundary extends Component<
   { children: ReactNode },
   { hasError: boolean }
@@ -19,17 +19,18 @@ export class ErrorBoundary extends Component<
   render() {
     if (this.state.hasError) {
       return (
-        <div style={{ padding: 32, textAlign: "center" }}>
-          <h2>Something went wrong</h2>
-          <p style={{ color: "var(--text-secondary)" }}>
-            Please refresh the page to try again.
-          </p>
-          <button onClick={() => this.setState({ hasError: false })}>
-            Try again
-          </button>
+        <div className="flex min-h-screen items-center justify-center bg-background px-6">
+          <div className="max-w-md space-y-3 rounded-2xl border border-border bg-card p-8 text-center">
+            <h2 className="text-2xl text-foreground">Something went wrong</h2>
+            <p className="text-sm text-muted-foreground">Please try refreshing the page.</p>
+            <Button onClick={() => this.setState({ hasError: false })} className="rounded-full">
+              Try again
+            </Button>
+          </div>
         </div>
       );
     }
+
     return this.props.children;
   }
 }
