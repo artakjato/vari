@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-const SALT_ROUNDS = 10;  // higher = more secure but slower; 10 is the standard
+const SALT_ROUNDS = 10;
 
 export const hashPassword = (password: string) =>
   bcrypt.hash(password, SALT_ROUNDS);
