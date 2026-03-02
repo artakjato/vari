@@ -1,10 +1,9 @@
 import { useState } from "react";
 
-// The filter categories shown as tabs
 const FILTERS = ["All", "Work Patterns", "Roles", "Languages"] as const;
 
 interface Props {
-  onFilterChange: (filter: string) => void; // callback when a tab is clicked
+  onFilterChange: (filter: string) => void;
 }
 
 export function FilterBar({ onFilterChange }: Props) {
@@ -33,7 +32,7 @@ export function FilterBar({ onFilterChange }: Props) {
             border: "none",
             background: "none",
             cursor: "pointer",
-            fontFamily: "Inter",
+            fontFamily: "var(--font-sans)",
             fontSize: 13,
             fontWeight: active === filter ? 600 : 400,
             color:

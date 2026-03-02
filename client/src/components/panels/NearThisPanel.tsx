@@ -1,62 +1,38 @@
-import { useMapStore } from "../../stores/mapStore";
-import { Card } from "../ui/Card";
-import { seedData } from "../../data/seedData";
+import { useMapStore } from '../../stores/mapStore';
+import { Card, CardContent } from '../ui/Card';
 
 interface Props {
-  currentRoleSlug: string; // the role currently shown in the inspector
-  industrySlug: string; // the industry this role belongs to
+	currentRoleSlug: string;
+	industrySlug: string;
 }
 
 export function NearThisPanel({ currentRoleSlug, industrySlug }: Props) {
-  const selectRole = useMapStore((state) => state.selectRole);
+	const selectRole = useMapStore((state) => state.selectRole);
+	const roles = useMapStore((state) => state.roles);
 
-  // Find all roles in the same industry, but exclude the current one
-  const relatedRoles = seedData.roles.filter(
-    (r) => r.industrySlug === industrySlug && r.slug !== currentRoleSlug,
-  );
+	const relatedRoles = roles.filter((role) => role.industrySlug === industrySlug && role.slug !== currentRoleSlug);
 
-  if (relatedRoles.length === 0) return null; // nothing to show
+	if (!relatedRoles.length) return null;
 
-  return (
-    <div style={{ marginTop: 24 }}>
-      <h3
-        style={{
-          fontFamily: "Outfit",
-          fontSize: 14,
-          color: "var(--text-secondary)",
-        }}
-      >
-        Related Roles
-      </h3>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 8,
-          marginTop: 8,
-        }}
-      >
-        {relatedRoles.map((role) => (
-          <Card key={role.slug} style={{ padding: 12, cursor: "pointer" }}>
-            <div onClick={() => selectRole(role.slug)}>
-              <div
-                style={{ fontWeight: 600, fontFamily: "Outfit", fontSize: 13 }}
-              >
-                {role.name}
-              </div>
-              <div
-                style={{
-                  fontSize: 12,
-                  color: "var(--text-secondary)",
-                  marginTop: 4,
-                }}
-              >
-                {role.description.slice(0, 80)}...
-              </div>
-            </div>
-          </Card>
-        ))}
-      </div>
-    </div>
-  );
+	return (
+		<section className="space-y-2">
+			<h3 className="text-[13px] font-semibold text-[#1a2740] sm:text-sm">Related roles</h3>
+			<div className="space-y-2">
+				{relatedRoles.map((role) => (
+					<Card
+						key={role.slug}
+						onClick={() => selectRole(role.slug)}
+						className="cursor-pointer gap-2 border-[#ecd3b7] bg-white/88 py-3 transition-colors duration-200 ease-out hover:bg-[#fff9f1]"
+					>
+						<CardContent className="flex items-start justify-between gap-3 px-3">
+							<div>
+								<p className="text-[13px] font-semibold text-[#1a2740] sm:text-sm">{role.name}</p>
+								<p className="mt-1 text-[11px] leading-relaxed text-[#756456] sm:text-xs">{role.description.slice(0, 76)}...</p>
+							</div>
+						</CardContent>
+					</Card>
+				))}
+			</div>
+		</section>
+	);
 }
