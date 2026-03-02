@@ -7,7 +7,7 @@ export function useMapNavigation() {
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && zoomLevel > 1) {
-        resetMap();  // for now, jump to root; later: step back one level
+        resetMap();
       }
     };
     window.addEventListener('keydown', handleKey);
