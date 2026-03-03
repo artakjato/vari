@@ -114,7 +114,7 @@ export function InspectorPanel({ variant = 'sidebar' }: InspectorPanelProps) {
 			? 'flex h-full w-[624px] max-w-[94vw] flex-shrink-0 flex-col border-l border-[#efcfb0] bg-[linear-gradient(180deg,#fffaf3_0%,#fff2e3_100%)] shadow-[-12px_0_32px_rgba(65,38,16,0.12)]'
 			: variant === 'bottom-sheet'
 				? 'fixed inset-x-0 bottom-0 z-40 flex h-[88dvh] flex-col rounded-t-3xl border-t border-[#efcfb0] bg-[linear-gradient(180deg,#fffaf3_0%,#fff2e3_100%)] shadow-[0_-10px_28px_rgba(65,38,16,0.14)]'
-				: 'fixed inset-0 z-50 flex h-[100dvh] flex-col bg-[linear-gradient(180deg,#fffaf3_0%,#fff2e3_100%)]';
+				: 'fixed inset-x-0 bottom-0 top-16 z-50 flex flex-col rounded-t-2xl border-t border-[#efcfb0] bg-[linear-gradient(180deg,#fffaf3_0%,#fff2e3_100%)] shadow-[0_-10px_28px_rgba(65,38,16,0.12)]';
 
 	return (
 		<aside className={wrapperClasses}>

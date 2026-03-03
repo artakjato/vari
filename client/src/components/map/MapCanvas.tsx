@@ -82,7 +82,8 @@ export function MapCanvas() {
 
 	const focusedIndustryName = industries.find((industry) => industry.slug === focusedIndustrySlug)?.name || 'Tech ecosystem';
 	const activeSunLabel = isIndustryFocused ? focusedIndustryName : 'Tech ecosystem';
-	const mobileSunY = -200;
+	const mobileSunY = -155;
+	const mobileSunSize = 100 + BUBBLE_SIZE_BOOST;
 	const mobilePlanetRadius = 48 + BUBBLE_SIZE_BOOST;
 	const mobileGridTop = 20;
 	const mobileColSpacing = 155;
@@ -99,7 +100,7 @@ export function MapCanvas() {
 
 	const lastRow = planetsData.length > 0 ? Math.floor((planetsData.length - 1) / 2) : 0;
 	const mobileContentBottom = mobileGridTop + lastRow * mobileRowSpacing + mobilePlanetRadius + 50;
-	const mobileVBTop = mobileSunY - 80;
+	const mobileVBTop = mobileSunY - mobileSunSize - 18;
 
 	const mobileVBHeight = mobileContentBottom - mobileVBTop + 700;
 	const mobileVBWidth = 370;
@@ -217,7 +218,7 @@ export function MapCanvas() {
 					))}
 
 					<g transform={isMobile ? `translate(0, ${mobileSunY})` : undefined}>
-						<CelestialSun label={activeSunLabel} size={100 + BUBBLE_SIZE_BOOST} />
+						<CelestialSun label={activeSunLabel} size={mobileSunSize} />
 					</g>
 				</g>
 			</svg>
