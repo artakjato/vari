@@ -11,7 +11,8 @@ export function seededRandom(seed: string): number {
 }
 
 export const ORBIT_BANDS = [160, 240, 320, 400, 480, 560];
-export const PLANET_SIZES = [42, 34, 28, 22];
+export const BUBBLE_SIZE_BOOST = 5;
+export const PLANET_SIZES = [42, 34, 28, 22].map((size) => size + BUBBLE_SIZE_BOOST);
 
 export const ROLE_COLORS: Record<string, { from: string; to: string }> = {
 	frontend: { from: '#ffa95b', to: '#ff7938' },
@@ -259,7 +260,7 @@ export function CelestialPlanet({
 												<motion.circle
 													cx={0}
 													cy={0}
-													r={10}
+													r={10 + BUBBLE_SIZE_BOOST}
 													fill={`url(#${moonGradientId})`}
 													whileHover={{ scale: 1.18 }}
 													onClick={(event) => {

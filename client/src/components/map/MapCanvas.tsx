@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useMapStore } from '../../stores/mapStore';
-import { CelestialPlanet, CelestialSun, ORBIT_BANDS } from './CelestialEntities';
+import { BUBBLE_SIZE_BOOST, CelestialPlanet, CelestialSun, ORBIT_BANDS } from './CelestialEntities';
 
 const INDUSTRY_LAYOUT_OVERRIDES: Record<string, { orbitIndex?: number; angle?: number }> = {
 	'cloud-infrastructure': {
@@ -83,7 +83,7 @@ export function MapCanvas() {
 	const focusedIndustryName = industries.find((industry) => industry.slug === focusedIndustrySlug)?.name || 'Tech ecosystem';
 	const activeSunLabel = isIndustryFocused ? focusedIndustryName : 'Tech ecosystem';
 	const mobileSunY = -200;
-	const mobilePlanetRadius = 48;
+	const mobilePlanetRadius = 48 + BUBBLE_SIZE_BOOST;
 	const mobileGridTop = 20;
 	const mobileColSpacing = 155;
 	const mobileRowSpacing = 150;
@@ -217,7 +217,7 @@ export function MapCanvas() {
 					))}
 
 					<g transform={isMobile ? `translate(0, ${mobileSunY})` : undefined}>
-						<CelestialSun label={activeSunLabel} size={100} />
+						<CelestialSun label={activeSunLabel} size={100 + BUBBLE_SIZE_BOOST} />
 					</g>
 				</g>
 			</svg>
