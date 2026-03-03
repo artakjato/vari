@@ -1,102 +1,185 @@
-import { create } from 'zustand';
-import type { Industry, Role, Pin } from '../lib/types';
-import { fetchMapData } from '../lib/api';
-import { seedData } from '../data/seedData';
+import { create } from "zustand";
+import { fetchMapData } from "../lib/api";
+import type { Industry, Pin, Role } from "../lib/types";
 
 interface MapState {
   industries: Industry[];
   roles: Role[];
-  loading: boolean,
+  loading: boolean;
   error: string | null;
 
-  /*Map navigation state */
-  zoomLevel: 1 | 2 | 3; 
+  zoomLevel: 1 | 2 | 3;
   focusedIndustrySlug: string | null;
   focusedDistrictSlug: string | null;
+  expandedDistrictSlug: string | null;
   selectedRoleSlug: string | null;
   inspectorOpen: boolean;
-  breadcrumbs: string[]; 
+  breadcrumbs: string[];
 
-  /*User and personalization */
+  searchQuery: string;
+  searchMatchedIndustrySlugs: string[];
+
+  viewport: 'desktop' | 'tablet' | 'mobile';
+
   currentUser: { email: string; displayName: string } | null;
   pins: Pin[];
 
-  /*Funstions that modify state */
-  setZoomLevel: (level: 1 | 2 | 3) => void; 
+  setZoomLevel: (level: 1 | 2 | 3) => void;
   focusIndustry: (slug: string) => void;
   focusDistrict: (slug: string) => void;
+  expandDistrict: (slug: string | null) => void;
   selectRole: (slug: string) => void;
+  setSearchState: (query: string, matchedIndustrySlugs: string[]) => void;
+  clearSearch: () => void;
+  setViewport: (viewport: 'desktop' | 'tablet' | 'mobile') => void;
   resetMap: () => void;
   addPin: (pin: Pin) => void;
   removePin: (id: string) => void;
   loadMapData: () => Promise<void>;
 }
 
+function hydrateIndustry(industry: Partial<Industry>): Industry | null {
+  if (!industry.slug || !industry.name || !industry.position) return null;
+
+  return {
+    _id: industry._id ?? `local-ind-${industry.slug}`,
+    slug: industry.slug,
+    name: industry.name,
+    subtitle: industry.subtitle ?? "",
+    color: industry.color ?? "#94A3B8",
+    icon: industry.icon ?? "",
+    position: industry.position,
+    size: industry.size ?? { rx: 160, ry: 120 },
+    children: industry.children ?? [],
+  };
+}
+
+function hydrateRole(role: Partial<Role>): Role | null {
+  if (!role.slug || !role.name || !role.industrySlug) return null;
+
+  return {
+    _id: role._id ?? `local-role-${role.slug}`,
+    slug: role.slug,
+    name: role.name,
+    description: role.description ?? "",
+    industrySlug: role.industrySlug,
+    districtSlug: role.districtSlug ?? "",
+    learningPath: role.learningPath ?? [],
+    courses: role.courses ?? [],
+  };
+}
+
 export const useMapStore = create<MapState>((set) => ({
-  /*Initial state values*/
-industries: [],
-roles: [],
-loading: false,
-error: null as string | null, 
+  industries: [],
+  roles: [],
+  loading: false,
+  error: null,
 
-zoomLevel: 1,
-focusedIndustrySlug: null,
-focusedDistrictSlug: null,
-selectedRoleSlug: null,
-inspectorOpen: false,
-breadcrumbs: ['All Industries'],
-
-currentUser: null,
-pins: [],
-
-/*Action implementation*/
-setZoomLevel: (level) => set({ zoomLevel: level }),
-
-focusIndustry: (slug) => set({
-  focusedIndustrySlug: slug,
-  zoomLevel: 2,
-  breadcrumbs: ['All industries', slug],
-}),
-
-focusDistrict: (slug) => set((state) => ({
-  focusedDistrictSlug: slug,
-  zoomLevel: 3,
-  breadcrumbs: [...state.breadcrumbs, slug],
-})), 
-
-selectRole: (slug) => set({ selectedRoleSlug: slug, inspectorOpen: true }),
-
-resetMap: () => set ({
+  zoomLevel: 1,
   focusedIndustrySlug: null,
   focusedDistrictSlug: null,
-  zoomLevel: 1,
-  breadcrumbs: ['All industries'],
-  inspectorOpen: false, 
-}), 
+  expandedDistrictSlug: null,
+  selectedRoleSlug: null,
+  inspectorOpen: false,
+  breadcrumbs: ["All industries"],
 
-addPin: (pin) => set((state) => ({ pins: [...state.pins, pin] })), 
+  searchQuery: "",
+  searchMatchedIndustrySlugs: [],
 
-removePin: (id) => set((state) => ({ pins: state.pins.filter(p => p._id !==id)})),
+  viewport: 'desktop',
 
-loadMapData: async () => {
-  set({ loading: true, error: null });
-  try {
-    const { data } = await fetchMapData();
-    set({ industries: data.industries, roles: data.roles, loading: false });
-  } catch (err) {
-    console.warn('Map API unavailable, falling back to local seed data.', err);
+  currentUser: null,
+  pins: [],
+
+  setZoomLevel: (level) => set({ zoomLevel: level }),
+
+  focusIndustry: (slug) =>
     set({
-      industries: seedData.industries,
-      roles: seedData.roles,
-      error: null,
-      loading: false,
-    });
-  }
-},
-})); 
+      focusedIndustrySlug: slug,
+      expandedDistrictSlug: null,
+      zoomLevel: 2,
+      breadcrumbs: ["All industries", slug],
+    }),
 
+  focusDistrict: (slug) =>
+    set((state) => ({
+      focusedDistrictSlug: slug,
+      zoomLevel: 3,
+      breadcrumbs: [...state.breadcrumbs, slug],
+    })),
+
+  expandDistrict: (slug) => set({ expandedDistrictSlug: slug }),
+
+  selectRole: (slug) => set({ selectedRoleSlug: slug, inspectorOpen: true }),
+
+  setSearchState: (query, matchedIndustrySlugs) =>
+    set({ searchQuery: query, searchMatchedIndustrySlugs: matchedIndustrySlugs }),
+
+  clearSearch: () =>
+    set({
+      searchQuery: "",
+      searchMatchedIndustrySlugs: [],
+    }),
+
+  setViewport: (viewport) => set({ viewport }),
+
+  resetMap: () =>
+    set({
+      focusedIndustrySlug: null,
+      focusedDistrictSlug: null,
+      expandedDistrictSlug: null,
+      selectedRoleSlug: null,
+      zoomLevel: 1,
+      breadcrumbs: ["All industries"],
+      inspectorOpen: false,
+      searchQuery: "",
+      searchMatchedIndustrySlugs: [],
+    }),
+
+  addPin: (pin) => set((state) => ({ pins: [...state.pins, pin] })),
+
+  removePin: (id) =>
+    set((state) => ({ pins: state.pins.filter((pin) => pin._id !== id) })),
+
+  loadMapData: async () => {
+    set({ loading: true, error: null });
+
+    try {
+      const { data } = await fetchMapData();
+
+      const serverIndustries = Array.isArray(data?.industries)
+        ? (data.industries as Partial<Industry>[])
+        : [];
+      const hydratedIndustries = serverIndustries
+        .map(hydrateIndustry)
+        .filter((industry): industry is Industry => industry !== null);
+
+      const serverRoles = Array.isArray(data?.roles)
+        ? (data.roles as Partial<Role>[])
+        : [];
+      const hydratedRoles = serverRoles
+        .map(hydrateRole)
+        .filter((role): role is Role => role !== null);
+
+      set({
+        industries: hydratedIndustries,
+        roles: hydratedRoles,
+        loading: false,
+        error: null,
+      });
+    } catch (err) {
+      console.warn("Map API unavailable. Ensure backend is running.", err);
+      set({
+        industries: [],
+        roles: [],
+        loading: false,
+        error: "Failed to connect to backend",
+      });
+    }
+  },
+}));
 
 export const useFocusedIndustry = () => {
   const { industries, focusedIndustrySlug } = useMapStore();
-  return industries.find(i => i.slug === focusedIndustrySlug) ?? null;
-}; 
+  return industries.find((industry) => industry.slug === focusedIndustrySlug) ?? null;
+};
