@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import { Industry } from '../models/Industry.ts';
-import { Role } from '../models/Role.ts';
-import { roles } from './roles.ts';
+import { Industry } from '../models/Industry.js';
+import { Role } from '../models/Role.js';
+import { roles } from './roles.js';
 
 dotenv.config();
 

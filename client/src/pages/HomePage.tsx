@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/Button";
 import { motion } from "framer-motion";
-import { ArrowRight, Search, Sparkles, TrendingUp } from "lucide-react";
+import { ArrowRight, Search, TrendingUp } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useMapStore } from "../stores/mapStore";
 import { Github, Linkedin, Mail } from "lucide-react";
@@ -238,7 +238,7 @@ export function HomePage() {
 
           <div className="px-4 py-4 sm:px-6">
             <p className="text-xs text-[#7d6f62]">
-              © {new Date().getFullYear()} Vari by Arta. All rights reserved.
+              (c) {new Date().getFullYear()} Vari by Arta. All rights reserved.
             </p>
           </div>
         </div>

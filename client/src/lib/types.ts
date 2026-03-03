@@ -53,6 +53,7 @@ export interface Role {
   slug: string;
   name: string;
   description: string;
+  tradeoffs?: string[];
   industrySlug: string;
   districtSlug?: string;
   learningPath?: LearningStep[];
