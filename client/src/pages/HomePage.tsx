@@ -79,15 +79,6 @@ export function HomePage() {
 
           <div className="relative grid gap-5 sm:gap-6 md:grid-cols-[1.25fr_0.75fr] md:items-end md:gap-10">
             <div className="space-y-3.5 sm:space-y-5 md:space-y-6">
-              <motion.p
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.22 }}
-                className="inline-flex items-center gap-1.5 rounded-full border border-[#f3d8bf] bg-[#fff4e8cc] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#8b5b31] sm:gap-2 sm:px-4 sm:py-1.5 sm:text-xs sm:tracking-[0.14em]"
-              >
-                <Sparkles size={14} />
-                Commercial UI Edition
-              </motion.p>
 
               <motion.h1
                 initial={{ opacity: 0, y: 8 }}
@@ -247,7 +238,7 @@ export function HomePage() {
 
           <div className="px-4 py-4 sm:px-6">
             <p className="text-xs text-[#7d6f62]">
-              © {new Date().getFullYear()} Vari. All rights reserved.
+              © {new Date().getFullYear()} Vari by Arta. All rights reserved.
             </p>
           </div>
         </div>
