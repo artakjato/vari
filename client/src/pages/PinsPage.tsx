@@ -49,9 +49,17 @@ export function PinsPage() {
   if (!currentUser) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background px-4 sm:px-6">
-        <p className="text-[13px] text-muted-foreground sm:text-sm">
-          Please <Link to="/auth" className="font-medium text-foreground hover:underline">sign in</Link> to view saved pins.
-        </p>
+        <div className="space-y-3 rounded-2xl border border-[#ebd2b7] bg-white/88 px-5 py-4 text-center shadow-[0_8px_22px_rgba(67,40,17,0.08)] sm:px-6 sm:py-5">
+          <p className="text-[13px] text-muted-foreground sm:text-sm">
+            Please <Link to="/auth" className="font-medium text-foreground hover:underline">sign in</Link> to view saved pins.
+          </p>
+          <Link
+            to="/"
+            className="inline-flex h-8 items-center justify-center rounded-full border border-[#e7cfb5] bg-white px-3 text-[11px] font-semibold text-foreground transition-colors hover:bg-[#fff3e3] sm:h-9 sm:px-4 sm:text-sm"
+          >
+            Back to Home
+          </Link>
+        </div>
       </div>
     );
   }
