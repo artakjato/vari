@@ -1,7 +1,6 @@
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { motion } from 'framer-motion';
 import { BookOpen, Briefcase, Clock3, MapPin, Rocket, ShieldCheck, Star, Wrench, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
@@ -134,7 +133,7 @@ export function InspectorPanel({ variant = 'sidebar' }: InspectorPanelProps) {
 				</button>
 			</header>
 
-			<ScrollArea className="min-h-0 flex-1">
+			<div className="min-h-0 flex-1 overflow-y-auto">
 				{!role || !industry ? (
 					<div className="flex flex-col items-center gap-3 px-6 py-16 text-center sm:px-8 sm:py-20">
 							<MapPin size={28} className="text-[#c9a47c]" />
@@ -157,29 +156,31 @@ export function InspectorPanel({ variant = 'sidebar' }: InspectorPanelProps) {
 							</div>
 
 							{activeTab === 'profile' && (
-								<section className="space-y-3 rounded-2xl border border-[#ecd3b7] bg-white/85 p-3.5 shadow-[0_6px_18px_rgba(61,34,10,0.08)] sm:p-4">
-									<div>
+								<section className="w-full space-y-3 rounded-2xl border border-[#ecd3b7] bg-white/85 p-3.5 shadow-[0_6px_18px_rgba(61,34,10,0.08)] sm:p-4">
+										<div className="text-center sm:text-left">
 										<h2 className="text-[1.35rem] leading-tight text-[#1a2740] sm:text-2xl">{role.name}</h2>
 										<p className="mt-1 text-xs text-[#7d6a59] sm:text-sm">in {industry.name}</p>
 									</div>
 
-									<div className="flex flex-wrap gap-2">
+									<div className="flex flex-wrap justify-center gap-2 sm:justify-start">
 										<Badge variant="outline" className="rounded-full border-[#e4cbb0] px-2.5 text-[11px] text-[#886f57]">
 											{salaryBadgeText}
 										</Badge>
 									</div>
 
 									{liveSalary?.live && liveSalary.year && (
-										<p className="text-[10px] font-medium uppercase tracking-[0.09em] text-[#9a7b5e]">
+										<p className="text-center text-[10px] font-medium uppercase tracking-[0.09em] text-[#9a7b5e] sm:text-left">
 											SCB {liveSalary.year} · {liveSalary.sectorLabel ?? liveSalary.sectorCode} · {liveSalary.occupationLabel ?? liveSalary.occupationCode}
 										</p>
 									)}
 
 									{salaryMedian !== null && salaryP25 !== null && salaryP75 !== null && (
-										<SalaryBar p25={salaryP25} median={salaryMedian} p75={salaryP75} marker={salaryAverage ?? undefined} markerSuffix="avg" />
+										<div className="mx-auto w-full max-w-[22rem] sm:mx-0 sm:max-w-none">
+												<SalaryBar p25={salaryP25} median={salaryMedian} p75={salaryP75} marker={salaryAverage ?? undefined} markerSuffix="avg" />
+										</div>
 									)}
 
-									<p className="text-[13px] leading-relaxed text-[#5e5460] sm:text-sm">{role.description}</p>
+									<p className="text-center text-[13px] leading-relaxed text-[#5e5460] sm:text-left sm:text-sm">{role.description}</p>
 
 									{!!role.learningPath?.length && (
 										<div className="space-y-3 rounded-2xl border border-[#ecd4bb] bg-[#fffaf3] p-2.5 shadow-[0_4px_12px_rgba(0,0,0,0.04)] sm:space-y-4 sm:p-3">
@@ -298,7 +299,7 @@ export function InspectorPanel({ variant = 'sidebar' }: InspectorPanelProps) {
 							</div>
 					</div>
 				)}
-			</ScrollArea>
+			</div>
 		</aside>
 	);
 }

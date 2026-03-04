@@ -23,7 +23,7 @@ export function SalaryBar({ p25, median, p75, marker, markerSuffix }: Props) {
 	const markerLabel = markerSuffix ? `${formatSEK(markerValue)} SEK ${markerSuffix}` : `${formatSEK(markerValue)} SEK`;
 
 	return (
-		<div className="space-y-1.5">
+		<div className="space-y-1.5 px-1 sm:px-0">
 			<div className="flex items-center justify-between">
 				<p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#a28264]">Salary Range (SEK/mo)</p>
 			</div>
@@ -33,10 +33,10 @@ export function SalaryBar({ p25, median, p75, marker, markerSuffix }: Props) {
 				<div className="absolute top-0 h-6 w-0.5 rounded-full bg-[#c95f12]" style={{ left: `${markerPct}%` }} />
 			</div>
 
-			<div className="flex justify-between text-[10px] text-[#8a7159]">
-				<span>{formatSEK(p25)} SEK</span>
-				<span className="font-semibold text-[#1a2740]">{markerLabel}</span>
-				<span>{formatSEK(p75)} SEK</span>
+			<div className="grid grid-cols-[auto_1fr_auto] items-center gap-1 text-[10px] text-[#8a7159]">
+				<span className="whitespace-nowrap">{formatSEK(p25)} SEK</span>
+				<span className="truncate text-center font-semibold text-[#1a2740]">{markerLabel}</span>
+				<span className="justify-self-end whitespace-nowrap">{formatSEK(p75)} SEK</span>
 			</div>
 		</div>
 	);
