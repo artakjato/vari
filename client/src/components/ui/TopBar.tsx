@@ -1,28 +1,28 @@
 import { Button } from '@/components/ui/Button';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useMapStore } from '../../stores/mapStore';
+
+const communityLinks = [
+	{ name: 'AI Sweden', url: 'https://www.ai.se/' },
+	{ name: 'Nordic APIs', url: 'https://nordicapis.com' },
+	{ name: 'Norrsken Foundation', url: 'https://www.norrsken.org' },
+	{ name: 'SwedenJS', url: 'https://swedenjs.org' },
+	{ name: 'TechSverige', url: 'https://techsverige.se' },
+	{ name: 'Women in Tech Sweden', url: 'https://womenintech.se' },
+] as const;
 
 export function TopBar() {
 	const location = useLocation();
-	const navigate = useNavigate();
 	const currentUser = useMapStore((state) => state.currentUser);
 	const resetMap = useMapStore((state) => state.resetMap);
-	const industries = useMapStore((state) => state.industries);
-	const focusedIndustrySlug = useMapStore((state) => state.focusedIndustrySlug);
-	const focusIndustry = useMapStore((state) => state.focusIndustry);
 	const [isCommunityMenuOpen, setCommunityMenuOpen] = useState(false);
 	const communityMenuRef = useRef<HTMLDivElement | null>(null);
 
 	const isMapRoute = location.pathname.startsWith('/map');
 	const isSavedRoute = location.pathname.startsWith('/pins');
-
-	const communityItems = useMemo(
-		() => [...industries].sort((a, b) => a.name.localeCompare(b.name)),
-		[industries],
-	);
 
 	useEffect(() => {
 		const closeOnOutsideClick = (event: MouseEvent) => {
@@ -40,19 +40,6 @@ export function TopBar() {
 	useEffect(() => {
 		setCommunityMenuOpen(false);
 	}, [location.pathname]);
-
-	const openAllCommunities = () => {
-		setCommunityMenuOpen(false);
-		resetMap();
-		navigate('/map');
-	};
-
-	const openCommunity = (slug: string) => {
-		setCommunityMenuOpen(false);
-		resetMap();
-		focusIndustry(slug);
-		navigate('/map');
-	};
 
 	return (
 		<header className="relative z-40 h-14 border-b border-border/80 bg-background/95 px-3 backdrop-blur sm:h-16 sm:px-5 md:h-[4.5rem] md:px-8 lg:px-10">
@@ -92,32 +79,18 @@ export function TopBar() {
 
 							{isCommunityMenuOpen && (
 								<div className="absolute left-0 top-[calc(100%+0.5rem)] z-[60] w-64 rounded-2xl border border-border/90 bg-white/95 p-1.5 shadow-[0_16px_36px_rgba(36,24,13,0.18)] backdrop-blur">
-									<button
-										type="button"
-										onClick={openAllCommunities}
-										className="flex w-full rounded-xl px-3 py-2 text-left text-sm font-semibold text-[#2f3b52] transition-colors hover:bg-[#fff0df]"
-									>
-										All communities
-									</button>
-									<div className="mx-2 my-1 h-px bg-[#f1ddca]" />
-									{communityItems.length === 0 ? (
-										<p className="px-3 py-2 text-xs text-[#8a7058]">Loading communities...</p>
-									) : (
-										communityItems.map((industry) => (
-											<button
-												key={industry.slug}
-												type="button"
-												onClick={() => openCommunity(industry.slug)}
-												className={`flex w-full rounded-xl px-3 py-2 text-left text-sm transition-colors ${
-													focusedIndustrySlug === industry.slug
-														? 'bg-[#ffe6cb] font-semibold text-[#5f3d21]'
-														: 'text-[#2f3b52] hover:bg-[#fff0df]'
-												}`}
-											>
-												{industry.name}
-											</button>
-										))
-									)}
+									{communityLinks.map((item) => (
+										<a
+											key={item.name}
+											href={item.url}
+											target="_blank"
+											rel="noopener noreferrer"
+											onClick={() => setCommunityMenuOpen(false)}
+											className="flex w-full rounded-xl px-3 py-2 text-left text-sm text-[#2f3b52] transition-colors hover:bg-[#fff0df]"
+										>
+											{item.name}
+										</a>
+									))}
 								</div>
 							)}
 						</div>
