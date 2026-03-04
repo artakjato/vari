@@ -13,6 +13,7 @@ interface PinCardProps {
 export function PinCard({ pin, name, onDelete }: PinCardProps) {
   const [notes, setNotes] = useState(pin.notes || "");
   const [editing, setEditing] = useState(false);
+  const pinTypeLabel = pin.targetType.replace(/-/g, " ");
 
   const saveNotes = async () => {
     await updatePin(pin._id, notes);
@@ -31,7 +32,7 @@ export function PinCard({ pin, name, onDelete }: PinCardProps) {
         <div className="flex items-center justify-between gap-2">
           <h3 className="text-[15px] font-semibold text-foreground sm:text-base">{name}</h3>
           <Badge variant="outline" className="rounded-full border-[#e7cfb5] bg-[#fff3e3] px-2 text-[9px] uppercase tracking-[0.14em] text-[#876f57] sm:px-2.5 sm:text-[10px]">
-            {pin.targetType}
+            {pinTypeLabel}
           </Badge>
         </div>
 

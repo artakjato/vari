@@ -68,7 +68,7 @@ export interface User {
 
 export interface Pin {
   _id: string;
-  targetType: "role" | "industry";
+  targetType: "role" | "industry" | "learning-step";
   targetId: string;
   notes: string;
 }

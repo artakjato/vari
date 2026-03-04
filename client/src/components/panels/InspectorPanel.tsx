@@ -29,6 +29,7 @@ export function InspectorPanel({ variant = 'sidebar' }: InspectorPanelProps) {
 	const [lastResolvedRoleSlug, setLastResolvedRoleSlug] = useState<string | null>(null);
 	const [liveSalary, setLiveSalary] = useState<RoleSalaryResponse | null>(null);
 	const [salaryLoading, setSalaryLoading] = useState(false);
+	const [pinnedStepIds, setPinnedStepIds] = useState<string[]>([]);
 
 	const selectedRole = roles.find((item) => item.slug === selectedRoleSlug);
 	const role =
@@ -109,6 +110,14 @@ export function InspectorPanel({ variant = 'sidebar' }: InspectorPanelProps) {
 		await createPin({ targetType: 'role', targetId: role.slug });
 	};
 
+	const handlePinLearningStep = async (stepOrder: number) => {
+		if (!role) return;
+		const stepPinId = `${role.slug}::${stepOrder}`;
+		if (pinnedStepIds.includes(stepPinId)) return;
+		await createPin({ targetType: 'learning-step', targetId: stepPinId });
+		setPinnedStepIds((current) => (current.includes(stepPinId) ? current : [...current, stepPinId]));
+	};
+
 	const wrapperClasses =
 		variant === 'sidebar'
 			? 'flex h-full w-[624px] max-w-[94vw] flex-shrink-0 flex-col border-l border-[#efcfb0] bg-[linear-gradient(180deg,#fffaf3_0%,#fff2e3_100%)] shadow-[-12px_0_32px_rgba(65,38,16,0.12)]'
@@ -185,6 +194,8 @@ export function InspectorPanel({ variant = 'sidebar' }: InspectorPanelProps) {
 												{(role.learningPath ?? []).map((step, index) => {
 													const Icon = stepIcons[index % stepIcons.length];
 													const iconBg = stepIconBg[index % stepIconBg.length];
+													const stepPinId = `${role.slug}::${step.order}`;
+													const isPinned = pinnedStepIds.includes(stepPinId);
 
 													return (
 														<motion.div
@@ -201,10 +212,24 @@ export function InspectorPanel({ variant = 'sidebar' }: InspectorPanelProps) {
 																<div className="min-w-0 flex-1 space-y-2">
 																	<div className="flex items-center justify-between gap-2">
 																		<p className="truncate text-[13px] font-semibold text-[#1a2740] sm:text-sm">{step.title}</p>
-																		<span className="inline-flex items-center gap-1 rounded-full bg-[#fff0dc] px-2 py-0.5 text-[10px] text-[#866a50] sm:text-[11px]">
-																			<Clock3 size={11} />
-																			{step.estimatedHours}h
-																		</span>
+																		<div className="flex items-center gap-1.5">
+																			<span className="inline-flex items-center gap-1 rounded-full bg-[#fff0dc] px-2 py-0.5 text-[10px] text-[#866a50] sm:text-[11px]">
+																				<Clock3 size={11} />
+																				{step.estimatedHours}h
+																			</span>
+																			<Button
+																				type="button"
+																				size="icon-xs"
+																				variant={isPinned ? 'secondary' : 'outline'}
+																				onClick={() => void handlePinLearningStep(step.order)}
+																				disabled={isPinned}
+																				className="h-6 w-6 border-[#e9cfb4] text-[#7f6853] hover:text-[#1a2740]"
+																				aria-label={isPinned ? `Pinned ${step.title}` : `Pin ${step.title}`}
+																				title={isPinned ? 'Pinned' : 'Pin learning step'}
+																			>
+																				<Star size={11} className={isPinned ? 'fill-current' : ''} />
+																			</Button>
+																		</div>
 																	</div>
 
 																	<p className="text-xs leading-relaxed text-[#756456] sm:text-[13px]">{step.description}</p>

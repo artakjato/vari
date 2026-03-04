@@ -2,14 +2,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { PinCard } from "../components/pins/PinCard";
 import { getPins } from "../lib/api";
+import type { Pin } from "../lib/types";
 import { useMapStore } from "../stores/mapStore";
-
-interface Pin {
-  _id: string;
-  targetType: "role" | "industry";
-  targetId: string;
-  notes: string;
-}
 
 export function PinsPage() {
   const [pins, setPins] = useState<Pin[]>([]);
@@ -32,8 +26,24 @@ export function PinsPage() {
       return role?.name ?? pin.targetId;
     }
 
-    const industry = industries.find((item) => item.slug === pin.targetId);
-    return industry?.name ?? pin.targetId;
+    if (pin.targetType === "industry") {
+      const industry = industries.find((item) => item.slug === pin.targetId);
+      return industry?.name ?? pin.targetId;
+    }
+
+    const [roleSlug, stepOrderRaw] = pin.targetId.split("::");
+    if (!roleSlug || !stepOrderRaw) return pin.targetId;
+
+    const role = roles.find((item) => item.slug === roleSlug);
+    const stepOrder = Number(stepOrderRaw);
+    const step = Number.isFinite(stepOrder)
+      ? role?.learningPath?.find((item) => item.order === stepOrder)
+      : undefined;
+
+    if (role?.name && step?.title) return `${role.name} - ${step.title}`;
+    if (step?.title) return step.title;
+    if (role?.name) return `${role.name} - Step ${stepOrderRaw}`;
+    return pin.targetId;
   };
 
   if (!currentUser) {
@@ -57,7 +67,7 @@ export function PinsPage() {
 
         {!pins.length ? (
           <p className="text-[13px] text-muted-foreground sm:text-sm">
-            You have not pinned roles or industries yet. Explore the{" "}
+            You have not pinned roles, industries, or learning steps yet. Explore the{" "}
             <Link to="/map" className="font-medium text-foreground hover:underline">
               map
             </Link>

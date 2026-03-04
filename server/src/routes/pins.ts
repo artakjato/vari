@@ -12,6 +12,10 @@ router.get('/api/me/pins', async (req, res) => {
 
 router.post('/api/me/pins', async (req, res) => {
   const { targetType, targetId, notes } = req.body;
+  const existingPin = await Pin.findOne({ userId: req.user!.userId, targetType, targetId });
+  if (existingPin) {
+    return res.json(existingPin);
+  }
   const pin = await Pin.create({ userId: req.user!.userId, targetType, targetId, notes });
   res.status(201).json(pin);
 });

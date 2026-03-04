@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const pinSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  targetType: { type: String, enum: ['role', 'industry'], required: true },
+  targetType: { type: String, enum: ['role', 'industry', 'learning-step'], required: true },
   targetId: { type: String, required: true },
   notes: { type: String, default: '' },
 }, { timestamps: true });
