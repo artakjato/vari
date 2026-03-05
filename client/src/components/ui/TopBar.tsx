@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/Button';
 import { motion } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, LogOut } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useMapStore } from '../../stores/mapStore';
 
 const communityLinks = [
@@ -16,6 +16,7 @@ const communityLinks = [
 
 export function TopBar() {
 	const location = useLocation();
+	const navigate = useNavigate();
 	const currentUser = useMapStore((state) => state.currentUser);
 	const resetMap = useMapStore((state) => state.resetMap);
 	const [isCommunityMenuOpen, setCommunityMenuOpen] = useState(false);
@@ -40,6 +41,13 @@ export function TopBar() {
 	useEffect(() => {
 		setCommunityMenuOpen(false);
 	}, [location.pathname]);
+
+	const handleLogout = () => {
+		localStorage.removeItem('vari_token');
+		useMapStore.setState({ currentUser: null, pins: [] });
+		resetMap();
+		navigate('/');
+	};
 
 	return (
 		<header className="relative z-40 h-14 border-b border-border/80 bg-background/95 px-3 backdrop-blur sm:h-16 sm:px-5 md:h-[4.5rem] md:px-8 lg:px-10">
@@ -129,12 +137,30 @@ export function TopBar() {
 					</Link>
 
 					{currentUser ? (
-						<span className="ml-1 hidden rounded-full border border-border/80 bg-white/70 px-2.5 py-1 text-xs font-semibold text-muted-foreground md:inline-block md:px-3 md:text-sm">
-							{currentUser.displayName}
-						</span>
+						<>
+							<span className="ml-1 hidden rounded-full border border-border/80 bg-white/70 px-2.5 py-1 text-xs font-semibold text-muted-foreground md:inline-block md:px-3 md:text-sm">
+								{currentUser.displayName}
+							</span>
+							<Button
+								type="button"
+								variant="outline"
+								size="sm"
+								onClick={handleLogout}
+								className="h-8 rounded-full border-border/90 bg-white/75 px-3 text-[11px] sm:h-9 sm:text-sm"
+							>
+								<LogOut size={13} />
+								<span>Log out</span>
+							</Button>
+						</>
 					) : (
-						<Link to="/auth" className="ml-1 text-[11px] font-semibold text-foreground hover:underline sm:text-sm">
-							Log in
+						<Link to="/auth">
+							<Button
+								variant="outline"
+								size="sm"
+								className="h-8 rounded-full border-border/90 bg-white/75 px-3 text-[11px] sm:h-9 sm:text-sm"
+							>
+								Log in
+							</Button>
 						</Link>
 					)}
 				</div>
