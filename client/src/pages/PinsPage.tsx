@@ -11,6 +11,7 @@ export function PinsPage() {
 
   const industries = useMapStore((state) => state.industries);
   const roles = useMapStore((state) => state.roles);
+  const loadMapData = useMapStore((state) => state.loadMapData);
   const currentUser = useMapStore((state) => state.currentUser);
 
   useEffect(() => {
@@ -19,6 +20,11 @@ export function PinsPage() {
       .catch(() => setPins([]))
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    if (industries.length > 0 && roles.length > 0) return;
+    void loadMapData();
+  }, [industries.length, loadMapData, roles.length]);
 
   const resolveName = (pin: Pin) => {
     if (pin.targetType === "role") {

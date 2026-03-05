@@ -69,7 +69,7 @@ function hydrateRole(role: Partial<Role>): Role | null {
   };
 }
 
-export const useMapStore = create<MapState>((set) => ({
+export const useMapStore = create<MapState>((set, get) => ({
   industries: [],
   roles: [],
   loading: false,
@@ -142,6 +142,10 @@ export const useMapStore = create<MapState>((set) => ({
     set((state) => ({ pins: state.pins.filter((pin) => pin._id !== id) })),
 
   loadMapData: async () => {
+    const state = get();
+    if (state.loading) return;
+    if (state.industries.length > 0 && state.roles.length > 0) return;
+
     set({ loading: true, error: null });
 
     try {

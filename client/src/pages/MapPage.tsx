@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { RefreshCw } from 'lucide-react';
+import { useEffect } from 'react';
 import { Breadcrumbs } from '../components/map/Breadcrumbs';
 import { MapCanvas } from '../components/map/MapCanvas';
 import { InspectorPanel } from '../components/panels/InspectorPanel';
@@ -15,8 +16,15 @@ export function MapPage() {
 	const loading = useMapStore((state) => state.loading);
 	const error = useMapStore((state) => state.error);
 	const loadMapData = useMapStore((state) => state.loadMapData);
+	const industriesCount = useMapStore((state) => state.industries.length);
+	const rolesCount = useMapStore((state) => state.roles.length);
 	const viewport = useMapStore((state) => state.viewport);
 	const inspectorOpen = useMapStore((state) => state.inspectorOpen);
+
+	useEffect(() => {
+		if (industriesCount > 0 && rolesCount > 0) return;
+		void loadMapData();
+	}, [industriesCount, loadMapData, rolesCount]);
 
 	if (loading) {
 		return (

@@ -38,7 +38,7 @@ export function StackBubble({ stack, index, position }: Props) {
         dy={4}
         fill="white"
         fontSize={11}
-        fontFamily="Outfit"
+        fontFamily="Plus Jakarta Sans"
       >
         {stack.name}
       </text>

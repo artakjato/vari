@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/Button";
 import { motion } from "framer-motion";
 import { ArrowRight, Search, TrendingUp } from "lucide-react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useMapStore } from "../stores/mapStore";
 import { Github, Linkedin, Mail } from "lucide-react";
@@ -12,7 +13,17 @@ const popularTags = ["Frontend", "Data", "Cloud", "AI", "Security", "DevOps"];
 export function HomePage() {
   const industries = useMapStore((state) => state.industries);
   const roles = useMapStore((state) => state.roles);
+  const loadMapData = useMapStore((state) => state.loadMapData);
   const resetMap = useMapStore((state) => state.resetMap);
+
+  useEffect(() => {
+    if (industries.length > 0 && roles.length > 0) return;
+    const timeoutId = window.setTimeout(() => {
+      void loadMapData();
+    }, 250);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [industries.length, loadMapData, roles.length]);
 
   return (
     <div className="min-h-screen bg-transparent pb-12 sm:pb-16 md:pb-20">

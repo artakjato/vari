@@ -8,7 +8,7 @@ export function BubbleLabel({
 }) {
   return (
     <g>
-      <text textAnchor="middle" y={-10} fill="white" fontSize={13} fontWeight="600" fontFamily="Outfit">
+      <text textAnchor="middle" y={-10} fill="white" fontSize={13} fontWeight="600" fontFamily="Plus Jakarta Sans">
         {name}
       </text>
       {subtitle && (

@@ -49,7 +49,7 @@ export function DistrictBubble({
         dy={4}
         fill="white"
         fontSize={11}
-        fontFamily="Outfit"
+        fontFamily="Plus Jakarta Sans"
       >
         {district.name}
       </text>
