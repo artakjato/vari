@@ -77,7 +77,15 @@ export function PinsPage() {
   return (
     <div className="min-h-screen bg-background px-4 py-8 sm:px-6 sm:py-10 md:px-10 md:py-12">
       <div className="mx-auto w-full max-w-3xl space-y-3.5 sm:space-y-4">
-        <h1 className="text-[1.75rem] leading-tight text-foreground sm:text-3xl">My saved pins</h1>
+        <div className="flex flex-wrap items-center justify-between gap-2.5">
+          <h1 className="text-[1.75rem] leading-tight text-foreground sm:text-3xl">My saved pins</h1>
+          <Link
+            to="/"
+            className="inline-flex h-8 items-center justify-center rounded-full border border-[#e7cfb5] bg-white px-3 text-[11px] font-semibold text-foreground transition-colors hover:bg-[#fff3e3] sm:h-9 sm:px-4 sm:text-sm"
+          >
+            Back to Home
+          </Link>
+        </div>
 
         {!pins.length ? (
           <p className="text-[13px] text-muted-foreground sm:text-sm">
