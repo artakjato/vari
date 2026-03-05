@@ -34,7 +34,7 @@ export function HomePage() {
               <a
                 key={item.label}
                 href={item.href}
-                className="text-[13px] font-semibold text-foreground/75 transition-colors duration-150 hover:text-foreground lg:text-sm"
+                className="text-[13px] font-semibold text-foreground/90 transition-colors duration-150 hover:text-foreground lg:text-sm"
               >
                 {item.label}
               </a>
@@ -148,7 +148,7 @@ export function HomePage() {
               transition={{ delay: 0.2, duration: 0.24 }}
               className="rounded-2xl border border-white/50 bg-white/92 p-4 text-[#1a2740] shadow-[0_18px_36px_rgba(255,111,78,0.2)] sm:p-5 md:rounded-3xl md:p-6"
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#865b35]">
+              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#6b4523]">
                 Live catalog
               </p>
               <p className="mt-2 text-2xl font-bold sm:text-3xl">
@@ -172,7 +172,7 @@ export function HomePage() {
                     <TrendingUp size={12} />
                     Updated weekly
                   </p>
-                  <p className="text-[10px] text-[#7d6f62] sm:text-xs">
+                  <p className="text-[10px] text-[#5f5144] sm:text-xs">
                     jobs + course signals
                   </p>
                 </div>
@@ -185,7 +185,7 @@ export function HomePage() {
         <div className="mt-10 sm:mt-12 md:mt-14 rounded-2xl border border-white/45 bg-white/80 backdrop-blur shadow-[0_18px_44px_rgba(255,111,78,0.16)]">
           <div className="flex flex-col gap-4 px-4 py-5 sm:px-6 sm:py-6 md:flex-row md:items-center md:justify-between">
             <div className="text-left">
-              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#865b35]">
+              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#6b4523]">
                 Contact
               </p>
               <p className="mt-1 text-sm text-[#2f3b52] sm:text-base">
@@ -237,7 +237,7 @@ export function HomePage() {
           <div className="h-px bg-[#f2ddc9]" />
 
           <div className="px-4 py-4 sm:px-6">
-            <p className="text-xs text-[#7d6f62]">
+            <p className="text-xs text-[#5f5144]">
               (c) {new Date().getFullYear()} Vari by Arta. All rights reserved.
             </p>
           </div>
