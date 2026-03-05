@@ -71,6 +71,7 @@ export interface Pin {
   targetType: "role" | "industry" | "learning-step";
   targetId: string;
   notes: string;
+  completedSteps?: number[];
 }
 
 export interface RoleSalaryResponse {

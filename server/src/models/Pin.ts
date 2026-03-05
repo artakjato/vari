@@ -5,6 +5,7 @@ const pinSchema = new mongoose.Schema({
   targetType: { type: String, enum: ['role', 'industry', 'learning-step'], required: true },
   targetId: { type: String, required: true },
   notes: { type: String, default: '' },
+  completedSteps: { type: [Number], default: [] },
 }, { timestamps: true });
 
 export const Pin = mongoose.model('Pin', pinSchema);

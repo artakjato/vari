@@ -25,8 +25,8 @@ export const login = (data: { email: string; password: string }) =>
 export const getMe = () => api.get('/api/me');
 
 export const getPins = () => api.get('/api/me/pins');
-export const createPin = (data: { targetType: string; targetId: string; notes?: string }) =>
+export const createPin = (data: { targetType: string; targetId: string; notes?: string; completedSteps?: number[] }) =>
   api.post('/api/me/pins', data);
-export const updatePin = (id: string, notes: string) =>
-  api.patch(`/api/me/pins/${id}`, { notes });
+export const updatePin = (id: string, data: { notes?: string; completedSteps?: number[] }) =>
+  api.patch(`/api/me/pins/${id}`, data);
 export const deletePin = (id: string) => api.delete(`/api/me/pins/${id}`);

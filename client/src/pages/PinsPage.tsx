@@ -46,6 +46,12 @@ export function PinsPage() {
     return pin.targetId;
   };
 
+  const resolveRoleLearningPath = (pin: Pin) => {
+    if (pin.targetType !== "role") return [];
+    const role = roles.find((item) => item.slug === pin.targetId);
+    return role?.learningPath ?? [];
+  };
+
   if (!currentUser) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background px-4 sm:px-6">
@@ -88,7 +94,11 @@ export function PinsPage() {
                 key={pin._id}
                 pin={pin}
                 name={resolveName(pin)}
+                roleLearningPath={resolveRoleLearningPath(pin)}
                 onDelete={(id) => setPins((items) => items.filter((item) => item._id !== id))}
+                onUpdate={(updatedPin) =>
+                  setPins((items) => items.map((item) => (item._id === updatedPin._id ? updatedPin : item)))
+                }
               />
             ))}
           </div>
