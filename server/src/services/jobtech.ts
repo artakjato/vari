@@ -1,5 +1,5 @@
-
-type JobData = { count: number; regions: { Stockholm: number; Göteborg: number; Malmö: number; Övriga: number } };
+﻿
+type JobData = { count: number; regions: { Stockholm: number; Göteborg: number; Malmö: number; other: number } };
 const cache: Record<string, { data: JobData; expiry: number }> = {};
 const CACHE_TTL_MS = 15 * 60 * 1000;
 
@@ -53,8 +53,8 @@ export async function fetchLiveJobCount(roleSlug: string): Promise<JobData | nul
       executeQuery(`${baseQuery} malmö`),
     ]);
 
-    const rawOvriga = total - (stockholm + goteborg + malmo);
-    const ovriga = Math.max(0, rawOvriga);
+    const rawOther = total - (stockholm + goteborg + malmo);
+    const other = Math.max(0, rawOther);
 
     const result = {
       count: total,
@@ -62,7 +62,7 @@ export async function fetchLiveJobCount(roleSlug: string): Promise<JobData | nul
         Stockholm: stockholm,
         Göteborg: goteborg,
         Malmö: malmo,
-        Övriga: ovriga
+        other,
       }
     };
 
