@@ -141,9 +141,9 @@ export function CelestialPlanet({
 
 	const color = colorSlug ? getColorForSlug(colorSlug) : getColorForSlug(slug);
 	const renderMoons = isSelected && moons.length > 0;
-	const moonOrbitRadius = radius + 45;
 	const moonGradientId = `${MOON_GRADIENT_ID_PREFIX}-${slug}`;
 	const usesFixedPosition = position !== undefined;
+	const moonOrbitRadius = usesFixedPosition ? radius + 30 : radius + 45;
 
 	return (
 		<g transform={usesFixedPosition ? `translate(${position.x}, ${position.y})` : `rotate(${degrees})`}>
