@@ -13,14 +13,31 @@ import searchRoutes from './routes/search.js';
 
 const app = express();
 
-app.use(cors({
-  origin: [
-    env.CLIENT_URL,
-    "http://localhost:5173",
-    "http://localhost:5174",
-    "http://localhost:5175"
-  ]
-}));
+const allowedOrigins = [
+  env.CLIENT_URL,
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://localhost:5175",
+].map((origin) => origin.replace(/\/$/, ""));
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+
+      const normalizedOrigin = origin.replace(/\/$/, "");
+      if (allowedOrigins.includes(normalizedOrigin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
+  })
+);
 app.use(express.json());
 app.use(mapRoutes);
 app.use(roleRoutes);
