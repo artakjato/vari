@@ -6,8 +6,6 @@ import { Link } from "react-router-dom";
 import { useMapStore } from "../stores/mapStore";
 import { Github, Linkedin, Mail } from "lucide-react";
 
-const menuItems = [{ label: "Discover", href: "#discover" }];
-
 const popularTags = ["Frontend", "Data", "Cloud", "AI", "Security", "DevOps"];
 
 export function HomePage() {
@@ -29,28 +27,24 @@ export function HomePage() {
     <div className="min-h-screen bg-transparent pb-12 sm:pb-16 md:pb-20">
       <header className="sticky top-0 z-30 border-b border-border/70 bg-background/90 backdrop-blur">
         <div className="mx-auto flex h-14 w-full max-w-[1280px] items-center justify-between gap-2.5 px-4 sm:h-16 sm:gap-4 sm:px-6 md:px-8 lg:px-10">
-          <Link
-            to="/"
-            onClick={resetMap}
-            className="inline-flex items-center gap-1.5 text-[0.95rem] font-bold tracking-tight text-foreground sm:gap-2 sm:text-lg md:text-[1.12rem]"
-          >
-            <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground sm:h-8 sm:w-8 sm:text-sm">
-              V
-            </span>
-            Vari
-          </Link>
-
-          <nav className="hidden items-center gap-5 md:flex lg:gap-6">
-            {menuItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="text-[13px] font-semibold text-foreground/90 transition-colors duration-150 hover:text-foreground lg:text-sm"
-              >
-                {item.label}
-              </a>
-            ))}
-          </nav>
+          <div className="flex items-center gap-3 sm:gap-4">
+            <a
+              href="#discover"
+              className="hidden text-[13px] font-semibold text-foreground/90 transition-colors duration-150 hover:text-foreground md:inline-block lg:text-sm"
+            >
+              Discover
+            </a>
+            <Link
+              to="/"
+              onClick={resetMap}
+              className="inline-flex items-center gap-1.5 text-[0.95rem] font-bold tracking-tight text-foreground sm:gap-2 sm:text-lg md:text-[1.12rem]"
+            >
+              <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground sm:h-8 sm:w-8 sm:text-sm">
+                V
+              </span>
+              Vari
+            </Link>
+          </div>
 
           <div className="flex items-center gap-1.5 sm:gap-2">
             <Link to="/auth">

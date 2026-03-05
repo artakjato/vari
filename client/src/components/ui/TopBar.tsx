@@ -23,7 +23,6 @@ export function TopBar() {
 	const communityMenuRef = useRef<HTMLDivElement | null>(null);
 
 	const isMapRoute = location.pathname.startsWith('/map');
-	const isSavedRoute = location.pathname.startsWith('/pins');
 
 	useEffect(() => {
 		const closeOnOutsideClick = (event: MouseEvent) => {
@@ -103,19 +102,6 @@ export function TopBar() {
 							)}
 						</div>
 
-						<Link
-							to="/pins"
-							className="relative rounded-full px-3.5 py-1.5 text-[13px] font-semibold text-muted-foreground transition-colors duration-200 ease-out hover:text-foreground md:px-4 md:text-sm"
-						>
-							{isSavedRoute && (
-								<motion.span
-									layoutId="topbar-active"
-									className="absolute inset-0 -z-10 rounded-full bg-[linear-gradient(120deg,#ffd6ab_0%,#ffc58d_40%,#ffb5ca_100%)]"
-									transition={{ duration: 0.2, ease: 'easeOut' }}
-								/>
-							)}
-							<span className={isSavedRoute ? 'text-[#2c2b3d]' : ''}>Saved</span>
-						</Link>
 					</nav>
 				</div>
 
