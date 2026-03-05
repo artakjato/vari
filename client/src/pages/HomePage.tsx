@@ -167,8 +167,8 @@ export function HomePage() {
                     industry clusters
                   </p>
                 </div>
-                <div className="rounded-xl border border-[#f3dcc6] bg-[#fff3e4] px-2.5 py-1.5 text-right sm:rounded-2xl sm:px-3 sm:py-2">
-                  <p className="inline-flex items-center gap-1 text-xs font-semibold text-[#4f7d35]">
+                <div className="rounded-xl border border-[#e3c39b] bg-[#fff0dd] px-2.5 py-1.5 text-right sm:rounded-2xl sm:px-3 sm:py-2">
+                  <p className="inline-flex items-center gap-1 text-xs font-semibold text-[#2f5c1f]">
                     <TrendingUp size={12} />
                     Updated weekly
                   </p>
