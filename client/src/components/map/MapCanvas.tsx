@@ -62,7 +62,7 @@ export function MapCanvas() {
 
 		return sortedRoles.map((role, i) => {
 			const targetIndustry = industries.find((industry) => industry.slug === focusedIndustrySlug);
-			const roleMoons = targetIndustry?.children?.filter((district) => role.districtSlug === district.slug) || [];
+			const roleDistrictSlug = targetIndustry?.children?.find((district) => role.districtSlug === district.slug)?.slug ?? null;
 
 			return {
 				id: role.slug,
@@ -73,9 +73,13 @@ export function MapCanvas() {
 				sizeIndex: i % 4,
 				colorSlug: role.slug,
 				angle: undefined,
-				onClick: () => useMapStore.getState().selectRole(role.slug),
+				onClick: () => {
+					const store = useMapStore.getState();
+					store.selectRole(role.slug);
+					store.expandDistrict(roleDistrictSlug);
+				},
 				isSelected: selectedRoleSlug === role.slug,
-				moons: roleMoons,
+				moons: [],
 			};
 		});
 	}, [isIndustryFocused, industries, roles, focusedIndustrySlug, selectedRoleSlug]);
