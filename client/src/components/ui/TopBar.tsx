@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/Button';
-import { motion } from 'framer-motion';
 import { ChevronDown, LogOut } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -70,14 +69,13 @@ export function TopBar() {
 								aria-expanded={isCommunityMenuOpen}
 								aria-label="Explore tech communities menu"
 							>
-								{isMapRoute && (
-									<motion.span
-										layoutId="topbar-active"
-										className="absolute inset-0 -z-10 rounded-full bg-[linear-gradient(120deg,#ffd6ab_0%,#ffc58d_40%,#ffb5ca_100%)]"
-										transition={{ duration: 0.2, ease: 'easeOut' }}
-									/>
-								)}
-								<span className={isMapRoute ? 'text-[#2c2b3d]' : ''}>Explore Tech Communities</span>
+								<span
+									aria-hidden="true"
+									className={`topbar-active-pill absolute inset-0 -z-10 rounded-full bg-[linear-gradient(120deg,#ffd6ab_0%,#ffc58d_40%,#ffb5ca_100%)] ${
+										isMapRoute ? 'is-active' : ''
+									}`}
+								/>
+								<span className={`transition-colors duration-200 ${isMapRoute ? 'text-[#2c2b3d]' : ''}`}>Explore Tech Communities</span>
 								<ChevronDown
 									size={14}
 									className={`transition-transform duration-200 ${isCommunityMenuOpen ? 'rotate-180' : ''} ${isMapRoute ? 'text-[#2c2b3d]' : ''}`}

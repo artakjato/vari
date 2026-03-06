@@ -172,6 +172,34 @@ pre {
 	}
 }
 
+@keyframes fade-scale-in {
+	from {
+		opacity: 0;
+		transform: scale(0.92);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+@keyframes draw-line {
+	to {
+		stroke-dashoffset: 0;
+	}
+}
+
+@keyframes breadcrumb-in {
+	from {
+		opacity: 0;
+		transform: translateY(-6px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
 @media (min-width: 640px) {
 	body {
 		font-size: 1rem;
@@ -214,6 +242,106 @@ pre {
 		linear-gradient(rgb(255 255 255 / 0.55) 1px, transparent 1px),
 		linear-gradient(90deg, rgb(255 255 255 / 0.55) 1px, transparent 1px);
 	background-size: 28px 28px;
+}
+
+.home-reveal {
+	opacity: 0;
+	animation: fade-up 420ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+	will-change: transform, opacity;
+}
+
+.home-float-orb {
+	animation: float-slow 7s ease-in-out infinite;
+}
+
+.map-loading-orb {
+	background: linear-gradient(90deg, #ffdcb7 25%, #fff2df 50%, #ffdcb7 75%);
+	background-size: 200% 100%;
+	animation:
+		shimmer 1.6s ease-in-out infinite,
+		breathe 3.2s ease-in-out infinite;
+}
+
+.topbar-active-pill {
+	opacity: 0;
+	transform: scale(0.92);
+	transition:
+		opacity 220ms ease-out,
+		transform 220ms ease-out;
+	pointer-events: none;
+}
+
+.topbar-active-pill.is-active {
+	opacity: 1;
+	transform: scale(1);
+}
+
+.map-breadcrumb-enter {
+	animation: breadcrumb-in 220ms ease-out both;
+}
+
+.celestial-line-draw {
+	stroke-dasharray: 1200;
+	stroke-dashoffset: 1200;
+	animation: draw-line 320ms ease-out forwards;
+}
+
+.celestial-moons-enter {
+	transform-box: fill-box;
+	transform-origin: center;
+	animation: fade-scale-in 240ms ease-out both;
+}
+
+.celestial-planet {
+	transform-box: fill-box;
+	transform-origin: center;
+	transition: transform 190ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.celestial-planet:hover {
+	transform: scale(1.08);
+}
+
+.celestial-planet:active {
+	transform: scale(0.96);
+}
+
+.celestial-moon {
+	transform-box: fill-box;
+	transform-origin: center;
+	transition: transform 170ms ease-out;
+}
+
+.celestial-moon:hover {
+	transform: scale(1.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.home-reveal {
+		opacity: 1;
+		animation: none;
+	}
+
+	.home-float-orb {
+		animation: none;
+	}
+
+	.map-loading-orb {
+		animation: none;
+	}
+
+	.topbar-active-pill {
+		transition: none;
+	}
+
+	.map-breadcrumb-enter,
+	.celestial-line-draw,
+	.celestial-moons-enter,
+	.celestial-planet,
+	.celestial-moon {
+		animation: none;
+		transition: none;
+	}
 }
 
 @theme inline {

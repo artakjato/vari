@@ -1,13 +1,17 @@
-import { motion } from 'framer-motion';
 import { RefreshCw } from 'lucide-react';
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Breadcrumbs } from '../components/map/Breadcrumbs';
 import { MapCanvas } from '../components/map/MapCanvas';
-import { InspectorPanel } from '../components/panels/InspectorPanel';
 import { TopBar } from '../components/ui/TopBar';
 import { useMapNavigation } from '../hooks/useMapNavigation';
 import { useViewport } from '../hooks/useViewport';
 import { useMapStore } from '../stores/mapStore';
+
+const InspectorPanel = lazy(() =>
+	import('../components/panels/InspectorPanel').then((module) => ({
+		default: module.InspectorPanel,
+	})),
+);
 
 export function MapPage() {
 	useMapNavigation();
@@ -31,22 +35,13 @@ export function MapPage() {
 			<div className="flex h-screen w-screen flex-col items-center justify-center gap-3 bg-background px-5 sm:gap-6">
 				<div className="flex scale-[0.68] gap-2.5 sm:scale-100 sm:gap-6">
 					{[1, 2, 3, 4].map((item) => (
-						<motion.div
+						<div
 							key={item}
-							className="rounded-full"
+							className="map-loading-orb rounded-full"
 							style={{
 								width: 100 + item * 20,
 								height: 80 + item * 15,
-								background: 'linear-gradient(90deg, #ffdcb7 25%, #fff2df 50%, #ffdcb7 75%)',
-								backgroundSize: '200% 100%',
-							}}
-							animate={{
-								backgroundPosition: ['200% 0', '-200% 0'],
-								scale: [1, 1.02, 1],
-							}}
-							transition={{
-								backgroundPosition: { duration: 1.5, ease: 'easeInOut', repeat: Infinity },
-								scale: { duration: 3, ease: 'easeInOut', repeat: Infinity, delay: item * 0.2 },
+								animationDelay: `${item * 0.12}s`,
 							}}
 						/>
 					))}
@@ -88,11 +83,17 @@ export function MapPage() {
 
 				{viewport === 'desktop' && inspectorOpen && (
 					<div className="h-full">
-						<InspectorPanel variant="sidebar" />
+						<Suspense fallback={null}>
+							<InspectorPanel variant="sidebar" />
+						</Suspense>
 					</div>
 				)}
 
-				{viewport !== 'desktop' && inspectorOpen && <InspectorPanel variant={inspectorVariant as 'bottom-sheet' | 'fullscreen'} />}
+				{viewport !== 'desktop' && inspectorOpen && (
+					<Suspense fallback={null}>
+						<InspectorPanel variant={inspectorVariant as 'bottom-sheet' | 'fullscreen'} />
+					</Suspense>
+				)}
 			</div>
 		</div>
 	);

@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import { useMapStore } from '../../stores/mapStore';
 
@@ -28,12 +27,7 @@ export function Breadcrumbs() {
 	}
 
 	return (
-		<motion.div
-			initial={{ opacity: 0, y: -6 }}
-			animate={{ opacity: 1, y: 0 }}
-			transition={{ duration: 0.2, ease: 'easeOut' }}
-			className="absolute left-3 right-3 top-3 flex max-w-[calc(100%-1.5rem)] items-center gap-1.5 overflow-x-auto rounded-full border border-border/85 bg-white/92 px-3 py-1.5 shadow-[0_8px_20px_rgba(56,34,14,0.12)] backdrop-blur sm:left-4 sm:right-auto sm:top-4 sm:max-w-[calc(100%-2rem)] sm:gap-2 sm:px-4 sm:py-2"
-		>
+		<div className="map-breadcrumb-enter absolute left-3 right-3 top-3 flex max-w-[calc(100%-1.5rem)] items-center gap-1.5 overflow-x-auto rounded-full border border-border/85 bg-white/92 px-3 py-1.5 shadow-[0_8px_20px_rgba(56,34,14,0.12)] backdrop-blur sm:left-4 sm:right-auto sm:top-4 sm:max-w-[calc(100%-2rem)] sm:gap-2 sm:px-4 sm:py-2">
 			{visibleCrumbs.map((crumb, index) => {
 				const isCurrent = index === visibleCrumbs.length - 1;
 
@@ -60,6 +54,6 @@ export function Breadcrumbs() {
 					</span>
 				);
 			})}
-		</motion.div>
+		</div>
 	);
 }

@@ -1,4 +1,3 @@
-import { AnimatePresence, motion } from 'framer-motion';
 import type { TechStack } from '../../lib/types';
 
 export function seededRandom(seed: string): number {
@@ -25,6 +24,20 @@ export const ROLE_COLORS: Record<string, { from: string; to: string }> = {
 
 const DEFAULT_PLANET_COLOR = { from: '#c8b094', to: '#9f835f' };
 const MOON_GRADIENT_ID_PREFIX = 'moon-grad';
+const PLANET_GRADIENT_ID_PREFIX = 'planet-grad';
+
+function getColorForSlug(value: string) {
+	const lower = value.toLowerCase();
+	if (lower.includes('front') || lower.includes('web')) return ROLE_COLORS.frontend;
+	if (lower.includes('back')) return ROLE_COLORS.backend;
+	if (lower.includes('machine') || lower.includes('ml') || lower.includes('ai')) return ROLE_COLORS['machine-learning'];
+	if (lower.includes('devops') || lower.includes('cloud') || lower.includes('infra')) return ROLE_COLORS.devops;
+	if (lower.includes('mobile') || lower.includes('ios') || lower.includes('android')) return ROLE_COLORS.mobile;
+	if (lower.includes('data')) return ROLE_COLORS['data-ai'];
+	if (lower.includes('cyber') || lower.includes('sec')) return { from: '#ff6a63', to: '#d9443f' };
+	if (lower.includes('game') || lower.includes('embed')) return { from: '#ffb648', to: '#f18719' };
+	return DEFAULT_PLANET_COLOR;
+}
 
 export function CelestialSun({ label, size = 100 }: { label: string; size?: number }) {
 	const words = label.split(' ');
@@ -41,7 +54,7 @@ export function CelestialSun({ label, size = 100 }: { label: string; size?: numb
 	const fontSize = size > 80 ? 22 : 16;
 
 	return (
-		<motion.g initial={{ scale: 0.95 }} animate={{ scale: [1, 1.03, 1] }} transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }} style={{ cursor: 'pointer' }}>
+		<g style={{ cursor: 'pointer', animation: 'breathe 6s ease-in-out infinite' }}>
 			<circle cx={0} cy={0} r={size + 18} fill="none" style={{ filter: 'drop-shadow(0 0 35px rgba(255,146,28,0.5)) drop-shadow(0 0 80px rgba(255,88,70,0.2))' }} />
 
 			<defs>
@@ -77,7 +90,7 @@ export function CelestialSun({ label, size = 100 }: { label: string; size?: numb
 					label
 				)}
 			</text>
-		</motion.g>
+		</g>
 	);
 }
 
@@ -125,61 +138,44 @@ export function CelestialPlanet({
 	}
 
 	const degrees = (angle * 180) / Math.PI;
-
-	const getColorForSlug = (value: string) => {
-		const lower = value.toLowerCase();
-		if (lower.includes('front') || lower.includes('web')) return ROLE_COLORS.frontend;
-		if (lower.includes('back')) return ROLE_COLORS.backend;
-		if (lower.includes('machine') || lower.includes('ml') || lower.includes('ai')) return ROLE_COLORS['machine-learning'];
-		if (lower.includes('devops') || lower.includes('cloud') || lower.includes('infra')) return ROLE_COLORS.devops;
-		if (lower.includes('mobile') || lower.includes('ios') || lower.includes('android')) return ROLE_COLORS.mobile;
-		if (lower.includes('data')) return ROLE_COLORS['data-ai'];
-		if (lower.includes('cyber') || lower.includes('sec')) return { from: '#ff6a63', to: '#d9443f' };
-		if (lower.includes('game') || lower.includes('embed')) return { from: '#ffb648', to: '#f18719' };
-		return DEFAULT_PLANET_COLOR;
-	};
-
 	const color = colorSlug ? getColorForSlug(colorSlug) : getColorForSlug(slug);
 	const renderMoons = isSelected && moons.length > 0;
 	const moonGradientId = `${MOON_GRADIENT_ID_PREFIX}-${slug}`;
+	const planetGradientId = `${PLANET_GRADIENT_ID_PREFIX}-${slug}`;
 	const usesFixedPosition = position !== undefined;
 	const moonOrbitRadius = usesFixedPosition ? radius + 30 : radius + 45;
 
 	return (
 		<g transform={usesFixedPosition ? `translate(${position.x}, ${position.y})` : `rotate(${degrees})`}>
-			<AnimatePresence>
-				{isSelected && !usesFixedPosition && (
-					<motion.line
-						x1={0}
-						y1={0}
-						x2={orbitRadius}
-						y2={0}
-						stroke="rgba(131, 91, 50, 0.35)"
-						strokeWidth="2"
-						initial={{ pathLength: 0, opacity: 0 }}
-						animate={{ pathLength: 1, opacity: 1 }}
-						exit={{ pathLength: 0, opacity: 0 }}
-						transition={{ duration: 0.4 }}
-						style={{ pointerEvents: 'none' }}
-					/>
-				)}
-			</AnimatePresence>
+			{isSelected && !usesFixedPosition && (
+				<line
+					className="celestial-line-draw"
+					x1={0}
+					y1={0}
+					x2={orbitRadius}
+					y2={0}
+					stroke="rgba(131, 91, 50, 0.35)"
+					strokeWidth="2"
+					style={{ pointerEvents: 'none' }}
+				/>
+			)}
 
 			<g transform={usesFixedPosition ? undefined : `translate(${orbitRadius}, 0)`}>
 				<g transform={usesFixedPosition ? undefined : `rotate(${-degrees})`}>
-					<motion.g
-						whileHover={{ scale: 1.08 }}
-						whileTap={{ scale: 0.95 }}
+					<g
 						onClick={(event) => {
 							event.stopPropagation();
 							onClick();
 						}}
-						style={{ cursor: 'pointer', opacity: isDimmed ? 0.32 : 1 }}
-						animate={isSelected ? { scale: [1, 1.05, 1] } : {}}
-						transition={isSelected ? { repeat: Infinity, duration: 4 } : {}}
+						className="celestial-planet"
+						style={{
+							cursor: 'pointer',
+							opacity: isDimmed ? 0.32 : 1,
+							animation: isSelected ? 'breathe 4s ease-in-out infinite' : undefined,
+						}}
 					>
 						<defs>
-							<radialGradient id={`grad-${slug}`} cx="30%" cy="30%" r="70%">
+							<radialGradient id={planetGradientId} cx="30%" cy="30%" r="70%">
 								<stop offset="0%" stopColor={color.from} />
 								<stop offset="100%" stopColor={color.to} />
 							</radialGradient>
@@ -190,7 +186,7 @@ export function CelestialPlanet({
 						</defs>
 
 						<circle cx={0} cy={0} r={radius} fill="none" stroke={color.from} strokeWidth="4" opacity="0.34" filter="blur(8px)" />
-						<circle cx={0} cy={0} r={radius} fill={`url(#grad-${slug})`} />
+						<circle cx={0} cy={0} r={radius} fill={`url(#${planetGradientId})`} />
 						<circle cx={-radius * 0.24} cy={-radius * 0.24} r={radius * 0.58} fill="#fff8ef" opacity="0.28" filter="blur(1.5px)" />
 
 						<text
@@ -205,120 +201,101 @@ export function CelestialPlanet({
 						>
 							{label}
 						</text>
-					</motion.g>
+					</g>
 
-					<AnimatePresence>
-						{renderMoons && (
-							<motion.g
-								initial={{ opacity: 0, scale: 0.84 }}
-								animate={{ opacity: 1, scale: 1 }}
-								exit={{ opacity: 0, scale: 0.84 }}
-								transition={{ duration: 0.25, staggerChildren: 0.08 }}
-							>
-								<circle cx={0} cy={0} r={moonOrbitRadius} fill="none" stroke="rgba(157, 111, 66, 0.22)" strokeWidth="1.1" strokeDasharray="4 6" />
+					{renderMoons && (
+						<g className="celestial-moons-enter">
+							<circle cx={0} cy={0} r={moonOrbitRadius} fill="none" stroke="rgba(157, 111, 66, 0.22)" strokeWidth="1.1" strokeDasharray="4 6" />
 
-								{moons.map((moon, moonIndex) => {
-									const moonAngleOffset = moons.length > 1 ? Math.PI / (moons.length - 1) : Math.PI / 2;
-									const moonAngle = Math.PI + moonIndex * moonAngleOffset;
-									const moonX = Math.cos(moonAngle) * moonOrbitRadius;
-									const moonY = Math.sin(moonAngle) * moonOrbitRadius;
+							{moons.map((moon, moonIndex) => {
+								const moonAngleOffset = moons.length > 1 ? Math.PI / (moons.length - 1) : Math.PI / 2;
+								const moonAngle = Math.PI + moonIndex * moonAngleOffset;
+								const moonX = Math.cos(moonAngle) * moonOrbitRadius;
+								const moonY = Math.sin(moonAngle) * moonOrbitRadius;
 
-									const isMoonSelected = selectedMoonSlug === moon.slug;
-									const asteroids = moon.stacks || [];
-									const asteroidOrbitRadius = 35;
+								const isMoonSelected = selectedMoonSlug === moon.slug;
+								const asteroids = moon.stacks || [];
+								const asteroidOrbitRadius = 35;
 
-									return (
-										<g key={moon.slug}>
-											{isMoonSelected && (
-												<motion.line
-													x1={0}
-													y1={0}
-													x2={moonX}
-													y2={moonY}
-													stroke="rgba(137, 92, 49, 0.35)"
-													strokeWidth="1.5"
-													initial={{ pathLength: 0 }}
-													animate={{ pathLength: 1 }}
-													transition={{ duration: 0.3 }}
-												/>
-											)}
+								return (
+									<g key={moon.slug}>
+										{isMoonSelected && (
+											<line
+												className="celestial-line-draw"
+												x1={0}
+												y1={0}
+												x2={moonX}
+												y2={moonY}
+												stroke="rgba(137, 92, 49, 0.35)"
+												strokeWidth="1.5"
+											/>
+										)}
 
-											<motion.g initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} transform={`translate(${moonX}, ${moonY})`}>
-												<text
-													x={0}
-													y={-18}
-													textAnchor="middle"
-													fill="#51617a"
-													fontSize="11"
-													fontWeight="600"
-													fontFamily="Plus Jakarta Sans, sans-serif"
-													style={{ pointerEvents: 'none' }}
-												>
-													{moon.name}
-												</text>
+										<g transform={`translate(${moonX}, ${moonY})`}>
+											<text
+												x={0}
+												y={-18}
+												textAnchor="middle"
+												fill="#51617a"
+												fontSize="11"
+												fontWeight="600"
+												fontFamily="Plus Jakarta Sans, sans-serif"
+												style={{ pointerEvents: 'none' }}
+											>
+												{moon.name}
+											</text>
 
-												<motion.circle
-													cx={0}
-													cy={0}
-													r={10 + BUBBLE_SIZE_BOOST}
-													fill={`url(#${moonGradientId})`}
-													whileHover={{ scale: 1.18 }}
-													onClick={(event) => {
-														event.stopPropagation();
-														onMoonClick?.(moon.slug);
-													}}
-													style={{ cursor: 'pointer' }}
-													animate={isMoonSelected ? { stroke: '#ed7a1d', strokeWidth: 2 } : {}}
-												/>
+											<circle
+												className="celestial-moon"
+												cx={0}
+												cy={0}
+												r={10 + BUBBLE_SIZE_BOOST}
+												fill={`url(#${moonGradientId})`}
+												stroke={isMoonSelected ? '#ed7a1d' : undefined}
+												strokeWidth={isMoonSelected ? 2 : undefined}
+												onClick={(event) => {
+													event.stopPropagation();
+													onMoonClick?.(moon.slug);
+												}}
+												style={{ cursor: 'pointer' }}
+											/>
 
-												<AnimatePresence>
-													{isMoonSelected && asteroids.length > 0 && (
-														<motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-															<circle cx={0} cy={0} r={asteroidOrbitRadius} fill="none" stroke="rgba(168, 122, 80, 0.2)" strokeWidth="1" />
-															{asteroids.map((stack, asteroidIndex) => {
-																const asteroidAngle = (asteroidIndex / asteroids.length) * Math.PI * 2;
-																const asteroidX = Math.cos(asteroidAngle) * asteroidOrbitRadius;
-																const asteroidY = Math.sin(asteroidAngle) * asteroidOrbitRadius;
+											{isMoonSelected && asteroids.length > 0 && (
+												<g>
+													<circle cx={0} cy={0} r={asteroidOrbitRadius} fill="none" stroke="rgba(168, 122, 80, 0.2)" strokeWidth="1" />
+													{asteroids.map((stack, asteroidIndex) => {
+														const asteroidAngle = (asteroidIndex / asteroids.length) * Math.PI * 2;
+														const asteroidX = Math.cos(asteroidAngle) * asteroidOrbitRadius;
+														const asteroidY = Math.sin(asteroidAngle) * asteroidOrbitRadius;
 
-																return (
-																	<motion.g
-																		key={`${stack.name}-${asteroidIndex}`}
-																		initial={{ scale: 0 }}
-																		animate={{ scale: 1 }}
-																		transition={{ delay: asteroidIndex * 0.04 }}
+														return (
+															<g key={`${stack.name}-${asteroidIndex}`}>
+																<line x1={0} y1={0} x2={asteroidX} y2={asteroidY} stroke="rgba(165, 118, 76, 0.22)" strokeWidth="1" />
+																<g transform={`translate(${asteroidX}, ${asteroidY})`} style={{ animation: `float-slow 3s ease-in-out ${asteroidIndex * 0.2}s infinite` }}>
+																	<circle cx={0} cy={0} r={5} fill="#b9874f" />
+																	<text
+																		x={0}
+																		y={15}
+																		textAnchor="middle"
+																		fill="#7d664f"
+																		fontSize="9"
+																		fontFamily="Plus Jakarta Sans, sans-serif"
+																		style={{ pointerEvents: 'none' }}
 																	>
-																		<line x1={0} y1={0} x2={asteroidX} y2={asteroidY} stroke="rgba(165, 118, 76, 0.22)" strokeWidth="1" />
-																		<motion.g
-																			transform={`translate(${asteroidX}, ${asteroidY})`}
-																			animate={{ y: [-2, 2, -2] }}
-																			transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: asteroidIndex * 0.2 }}
-																		>
-																			<circle cx={0} cy={0} r={5} fill="#b9874f" />
-																			<text
-																				x={0}
-																				y={15}
-																				textAnchor="middle"
-																				fill="#7d664f"
-																				fontSize="9"
-																				fontFamily="Plus Jakarta Sans, sans-serif"
-																				style={{ pointerEvents: 'none' }}
-																			>
-																				{stack.name}
-																			</text>
-																		</motion.g>
-																	</motion.g>
-																);
-															})}
-														</motion.g>
-													)}
-												</AnimatePresence>
-											</motion.g>
+																		{stack.name}
+																	</text>
+																</g>
+															</g>
+														);
+													})}
+												</g>
+											)}
 										</g>
-									);
-								})}
-							</motion.g>
-						)}
-					</AnimatePresence>
+									</g>
+								);
+							})}
+						</g>
+					)}
 				</g>
 			</g>
 		</g>
