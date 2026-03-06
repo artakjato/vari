@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/Button";
-import { motion } from "framer-motion";
 import { ArrowRight, Search, TrendingUp } from "lucide-react";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
@@ -16,11 +15,22 @@ export function HomePage() {
 
   useEffect(() => {
     if (industries.length > 0 && roles.length > 0) return;
-    const timeoutId = window.setTimeout(() => {
+    const fetchData = () => {
       void loadMapData();
-    }, 250);
+    };
 
-    return () => window.clearTimeout(timeoutId);
+    const idleWindow = window as Window & {
+      requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    };
+
+    if (typeof idleWindow.requestIdleCallback === "function") {
+      const idleId = idleWindow.requestIdleCallback(fetchData, { timeout: 1800 });
+      return () => idleWindow.cancelIdleCallback?.(idleId);
+    }
+
+    const timeoutId = setTimeout(fetchData, 900);
+    return () => clearTimeout(timeoutId);
   }, [industries.length, loadMapData, roles.length]);
 
   return (
@@ -76,41 +86,34 @@ export function HomePage() {
           <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(130deg,rgba(8,17,34,0.08),transparent_35%,rgba(255,255,255,0.14))]" />
           <div className="pointer-events-none absolute -left-10 top-10 h-44 w-44 rounded-full bg-white/24 blur-3xl" />
           <div className="pointer-events-none absolute -right-16 -top-10 h-52 w-52 rounded-full bg-[#ffa6d2]/50 blur-3xl" />
-          <motion.div
-            animate={{ y: [0, -12, 0] }}
-            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-            className="pointer-events-none absolute right-[20%] top-6 hidden h-24 w-24 rounded-full border border-white/40 bg-white/10 md:block"
+          <div
+            aria-hidden="true"
+            className="home-float-orb pointer-events-none absolute right-[20%] top-6 hidden h-24 w-24 rounded-full border border-white/40 bg-white/10 md:block"
           />
 
           <div className="relative grid gap-5 sm:gap-6 md:grid-cols-[1.25fr_0.75fr] md:items-end md:gap-10">
             <div className="space-y-3.5 sm:space-y-5 md:space-y-6">
 
-              <motion.h1
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.06, duration: 0.24 }}
-                className="max-w-3xl text-[clamp(1.9rem,8.1vw,4.35rem)] leading-[1.04] text-[#1a2740] md:leading-[1.02]"
+              <h1
+                style={{ animationDelay: "60ms" }}
+                className="home-reveal max-w-3xl text-[clamp(1.9rem,8.1vw,4.35rem)] leading-[1.04] text-[#1a2740] md:leading-[1.02]"
               >
                 Plan your next career move with a brighter map of real
                 opportunities.
-              </motion.h1>
+              </h1>
 
-              <motion.p
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.12, duration: 0.24 }}
-                className="max-w-2xl text-[0.95rem] text-[#2f3b52] sm:text-base md:text-lg"
+              <p
+                style={{ animationDelay: "120ms" }}
+                className="home-reveal max-w-2xl text-[0.95rem] text-[#2f3b52] sm:text-base md:text-lg"
               >
                 Vari blends role roadmaps, salary signals, and curated courses
                 in one high-clarity workspace so you can compare paths and take
                 action fast.
-              </motion.p>
+              </p>
 
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.16, duration: 0.24 }}
-                className="space-y-2.5 sm:space-y-3"
+              <div
+                style={{ animationDelay: "160ms" }}
+                className="home-reveal space-y-2.5 sm:space-y-3"
               >
                 <div className="flex flex-col gap-2.5 rounded-2xl border border-white/50 bg-white/92 p-1.5 shadow-[0_16px_32px_rgba(255,90,32,0.16)] sm:p-2 md:flex-row md:items-center">
                   <button className="rounded-xl border border-[#f1ddca] bg-[#fff6ec] px-3 py-1.5 text-left text-[13px] font-semibold text-[#66360f] sm:px-4 sm:py-2 sm:text-sm md:min-w-40">
@@ -144,14 +147,12 @@ export function HomePage() {
                     </span>
                   ))}
                 </div>
-              </motion.div>
+              </div>
             </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.24 }}
-              className="rounded-2xl border border-white/50 bg-white/92 p-4 text-[#1a2740] shadow-[0_18px_36px_rgba(255,111,78,0.2)] sm:p-5 md:rounded-3xl md:p-6"
+            <div
+              style={{ animationDelay: "200ms" }}
+              className="home-reveal rounded-2xl border border-white/50 bg-white/92 p-4 text-[#1a2740] shadow-[0_18px_36px_rgba(255,111,78,0.2)] sm:p-5 md:rounded-3xl md:p-6"
             >
               <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#6b4523]">
                 Live catalog
@@ -182,7 +183,7 @@ export function HomePage() {
                   </p>
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
         </section>
       </main>
@@ -237,6 +238,25 @@ export function HomePage() {
                 <span>GitHub</span>
               </a>
             </nav>
+          </div>
+
+          <div className="px-4 pb-5 sm:px-6 sm:pb-6">
+            <div className="rounded-2xl border border-[#f1ddca] bg-[#fff6ec] px-4 py-4 shadow-[0_10px_24px_rgba(255,111,78,0.08)] sm:px-5 sm:py-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#6b4523]">
+                Name origin
+              </p>
+              <p className="mt-2 text-sm text-[#2f3b52] sm:text-base">
+                Vari is a name with two meanings. It is a tribute to the
+                JavaScript keywords var, let, and const, which were central
+                concepts during the web development bootcamp where the project
+                began.
+              </p>
+              <p className="mt-2 text-sm text-[#2f3b52] sm:text-base">
+                At the same time, vari relates to the Greek idea of change or
+                variation, reflecting the many people exploring new paths or
+                pivoting their careers into tech.
+              </p>
+            </div>
           </div>
 
           <div className="h-px bg-[#f2ddc9]" />
