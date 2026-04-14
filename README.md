@@ -1,4 +1,5 @@
 # VARI
+you can access the app here: https://vari-client.onrender.com/
 
 Vari is a career exploration web app. It helps users explore:
 
