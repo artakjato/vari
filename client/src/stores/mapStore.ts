@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { fetchMapData } from "../lib/api";
+import { fetchMapData, getMe } from "../lib/api";
 import type { Industry, Pin, Role } from "../lib/types";
 
 interface MapState {
@@ -7,6 +7,11 @@ interface MapState {
   roles: Role[];
   loading: boolean;
   error: string | null;
+
+  authReady: boolean;
+  setCurrentUser: (user: { email: string; displayName: string } | null) => void;
+  hydrateAuth: () => Promise<void>;
+  logout: () => void;
 
   zoomLevel: 1 | 2 | 3;
   focusedIndustrySlug: string | null;
@@ -19,7 +24,7 @@ interface MapState {
   searchQuery: string;
   searchMatchedIndustrySlugs: string[];
 
-  viewport: 'desktop' | 'tablet' | 'mobile';
+  viewport: "desktop" | "tablet" | "mobile";
 
   currentUser: { email: string; displayName: string } | null;
   pins: Pin[];
@@ -31,7 +36,7 @@ interface MapState {
   selectRole: (slug: string) => void;
   setSearchState: (query: string, matchedIndustrySlugs: string[]) => void;
   clearSearch: () => void;
-  setViewport: (viewport: 'desktop' | 'tablet' | 'mobile') => void;
+  setViewport: (viewport: "desktop" | "tablet" | "mobile") => void;
   resetMap: () => void;
   addPin: (pin: Pin) => void;
   removePin: (id: string) => void;
@@ -86,10 +91,11 @@ export const useMapStore = create<MapState>((set, get) => ({
   searchQuery: "",
   searchMatchedIndustrySlugs: [],
 
-  viewport: 'desktop',
+  viewport: "desktop",
 
   currentUser: null,
   pins: [],
+  authReady: false,
 
   setZoomLevel: (level) => set({ zoomLevel: level }),
 
@@ -113,7 +119,43 @@ export const useMapStore = create<MapState>((set, get) => ({
   selectRole: (slug) => set({ selectedRoleSlug: slug, inspectorOpen: true }),
 
   setSearchState: (query, matchedIndustrySlugs) =>
-    set({ searchQuery: query, searchMatchedIndustrySlugs: matchedIndustrySlugs }),
+    set({
+      searchQuery: query,
+      searchMatchedIndustrySlugs: matchedIndustrySlugs,
+    }),
+
+    setCurrentUser: (user) => set({ currentUser: user }),
+
+hydrateAuth: async () => {
+  const token = localStorage.getItem("vari_token");
+
+  if (!token) {
+    set({ currentUser: null, authReady: true });
+    return;
+  }
+
+  try {
+    const { data } = await getMe();
+    set({
+      currentUser: data.user,
+      authReady: true,
+    });
+  } catch {
+    localStorage.removeItem("vari_token");
+    set({
+      currentUser: null,
+      authReady: true,
+    });
+  }
+},
+
+logout: () => {
+  localStorage.removeItem("vari_token");
+  set({
+    currentUser: null,
+    pins: [],
+  });
+},
 
   clearSearch: () =>
     set({
@@ -185,5 +227,7 @@ export const useMapStore = create<MapState>((set, get) => ({
 
 export const useFocusedIndustry = () => {
   const { industries, focusedIndustrySlug } = useMapStore();
-  return industries.find((industry) => industry.slug === focusedIndustrySlug) ?? null;
+  return (
+    industries.find((industry) => industry.slug === focusedIndustrySlug) ?? null
+  );
 };
