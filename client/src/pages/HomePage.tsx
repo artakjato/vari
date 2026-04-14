@@ -57,6 +57,7 @@ const logout = useMapStore((state) => state.logout);
               Vari
             </Link>
           </div>
+          </header>
 
           <div className="flex items-center gap-1.5 sm:gap-2">
   {currentUser ? (
