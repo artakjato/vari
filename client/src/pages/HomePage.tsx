@@ -12,6 +12,8 @@ export function HomePage() {
   const roles = useMapStore((state) => state.roles);
   const loadMapData = useMapStore((state) => state.loadMapData);
   const resetMap = useMapStore((state) => state.resetMap);
+  const currentUser = useMapStore((state) => state.currentUser);
+const logout = useMapStore((state) => state.logout);
 
   useEffect(() => {
     if (industries.length > 0 && roles.length > 0) return;
@@ -57,26 +59,54 @@ export function HomePage() {
           </div>
 
           <div className="flex items-center gap-1.5 sm:gap-2">
-            <Link to="/auth">
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-8 rounded-full border-border/80 bg-white/75 px-3 text-[11px] sm:h-9 sm:px-3.5 sm:text-sm"
-              >
-                Log In
-              </Button>
-            </Link>
-            <Link to="/map" onClick={resetMap}>
-              <Button
-                size="sm"
-                className="h-8 rounded-full px-3 text-[11px] sm:h-9 sm:px-4 sm:text-sm"
-              >
-                Start Free
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+  {currentUser ? (
+    <>
+      <span className="hidden text-xs font-medium text-[#5f5144] sm:inline">
+        Hi, {currentUser.displayName}
+      </span>
+
+      <Link to="/pins">
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-8 rounded-full border-border/80 bg-white/75 px-3 text-[11px] sm:h-9 sm:px-3.5 sm:text-sm"
+        >
+          My Pins
+        </Button>
+      </Link>
+
+      <Button
+        variant="secondary"
+        size="sm"
+        className="h-8 rounded-full px-3 text-[11px] sm:h-9 sm:px-4 sm:text-sm"
+        onClick={logout}
+      >
+        Log Out
+      </Button>
+    </>
+  ) : (
+    <>
+      <Link to="/auth">
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-8 rounded-full border-border/80 bg-white/75 px-3 text-[11px] sm:h-9 sm:px-3.5 sm:text-sm"
+        >
+          Log In
+        </Button>
+      </Link>
+
+      <Link to="/map" onClick={resetMap}>
+        <Button
+          size="sm"
+          className="h-8 rounded-full px-3 text-[11px] sm:h-9 sm:px-4 sm:text-sm"
+        >
+          Start Free
+        </Button>
+      </Link>
+    </>
+  )}
+</div>
 
       <main className="mx-auto flex w-full max-w-[1280px] flex-col gap-8 px-4 pt-5 sm:gap-10 sm:px-6 sm:pt-7 md:gap-14 md:px-8 md:pt-10 lg:px-10">
         <section
