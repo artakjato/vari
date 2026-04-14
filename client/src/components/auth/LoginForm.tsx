@@ -18,7 +18,7 @@ export function LoginForm({ onSwitch }: { onSwitch: () => void }) {
     try {
       const { data } = await login({ email, password });
       localStorage.setItem("vari_token", data.token);
-      useMapStore.setState({ currentUser: data.user });
+      useMapStore.getState().setCurrentUser(data.user);
       navigate("/map");
     } catch {
       setError("Invalid email or password. Please try again.");

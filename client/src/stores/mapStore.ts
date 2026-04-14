@@ -124,38 +124,41 @@ export const useMapStore = create<MapState>((set, get) => ({
       searchMatchedIndustrySlugs: matchedIndustrySlugs,
     }),
 
-    setCurrentUser: (user) => set({ currentUser: user }),
+  setCurrentUser: (user) => set({ currentUser: user }),
 
-hydrateAuth: async () => {
-  const token = localStorage.getItem("vari_token");
+  hydrateAuth: async () => {
+    const token = localStorage.getItem("vari_token");
 
-  if (!token) {
-    set({ currentUser: null, authReady: true });
-    return;
-  }
+    if (!token) {
+      set({ currentUser: null, authReady: true });
+      return;
+    }
 
-  try {
-    const { data } = await getMe();
-    set({
-      currentUser: data.user,
-      authReady: true,
-    });
-  } catch {
+    try {
+      const { data } = await getMe();
+      set({
+        currentUser: {
+          email: data.email,
+          displayName: data.displayName,
+        },
+        authReady: true,
+      });
+    } catch {
+      localStorage.removeItem("vari_token");
+      set({
+        currentUser: null,
+        authReady: true,
+      });
+    }
+  },
+
+  logout: () => {
     localStorage.removeItem("vari_token");
     set({
       currentUser: null,
-      authReady: true,
+      pins: [],
     });
-  }
-},
-
-logout: () => {
-  localStorage.removeItem("vari_token");
-  set({
-    currentUser: null,
-    pins: [],
-  });
-},
+  },
 
   clearSearch: () =>
     set({

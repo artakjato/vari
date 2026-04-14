@@ -19,7 +19,7 @@ export function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
     try {
       const { data } = await register({ email, password, displayName });
       localStorage.setItem("vari_token", data.token);
-      useMapStore.setState({ currentUser: data.user });
+      useMapStore.getState().setCurrentUser(data.user);
       navigate("/map");
     } catch {
       setError("Registration failed. Email might already be in use.");
