@@ -13,7 +13,7 @@ export function HomePage() {
   const loadMapData = useMapStore((state) => state.loadMapData);
   const resetMap = useMapStore((state) => state.resetMap);
   const currentUser = useMapStore((state) => state.currentUser);
-const logout = useMapStore((state) => state.logout);
+  const logout = useMapStore((state) => state.logout);
 
   useEffect(() => {
     if (industries.length > 0 && roles.length > 0) return;
@@ -22,12 +22,17 @@ const logout = useMapStore((state) => state.logout);
     };
 
     const idleWindow = window as Window & {
-      requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number;
+      requestIdleCallback?: (
+        callback: () => void,
+        options?: { timeout: number },
+      ) => number;
       cancelIdleCallback?: (handle: number) => void;
     };
 
     if (typeof idleWindow.requestIdleCallback === "function") {
-      const idleId = idleWindow.requestIdleCallback(fetchData, { timeout: 1800 });
+      const idleId = idleWindow.requestIdleCallback(fetchData, {
+        timeout: 1800,
+      });
       return () => idleWindow.cancelIdleCallback?.(idleId);
     }
 
@@ -57,57 +62,58 @@ const logout = useMapStore((state) => state.logout);
               Vari
             </Link>
           </div>
-          </header>
 
           <div className="flex items-center gap-1.5 sm:gap-2">
-  {currentUser ? (
-    <>
-      <span className="hidden text-xs font-medium text-[#5f5144] sm:inline">
-        Hi, {currentUser.displayName}
-      </span>
+            {currentUser ? (
+              <>
+                <span className="hidden text-xs font-medium text-[#5f5144] sm:inline">
+                  Hi, {currentUser.displayName}
+                </span>
 
-      <Link to="/pins">
-        <Button
-          variant="outline"
-          size="sm"
-          className="h-8 rounded-full border-border/80 bg-white/75 px-3 text-[11px] sm:h-9 sm:px-3.5 sm:text-sm"
-        >
-          My Pins
-        </Button>
-      </Link>
+                <Link to="/pins">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-8 rounded-full border-border/80 bg-white/75 px-3 text-[11px] sm:h-9 sm:px-3.5 sm:text-sm"
+                  >
+                    My Pins
+                  </Button>
+                </Link>
 
-      <Button
-        variant="secondary"
-        size="sm"
-        className="h-8 rounded-full px-3 text-[11px] sm:h-9 sm:px-4 sm:text-sm"
-        onClick={logout}
-      >
-        Log Out
-      </Button>
-    </>
-  ) : (
-    <>
-      <Link to="/auth">
-        <Button
-          variant="outline"
-          size="sm"
-          className="h-8 rounded-full border-border/80 bg-white/75 px-3 text-[11px] sm:h-9 sm:px-3.5 sm:text-sm"
-        >
-          Log In
-        </Button>
-      </Link>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="h-8 rounded-full px-3 text-[11px] sm:h-9 sm:px-4 sm:text-sm"
+                  onClick={logout}
+                >
+                  Log Out
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link to="/auth">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-8 rounded-full border-border/80 bg-white/75 px-3 text-[11px] sm:h-9 sm:px-3.5 sm:text-sm"
+                  >
+                    Log In
+                  </Button>
+                </Link>
 
-      <Link to="/map" onClick={resetMap}>
-        <Button
-          size="sm"
-          className="h-8 rounded-full px-3 text-[11px] sm:h-9 sm:px-4 sm:text-sm"
-        >
-          Start Free
-        </Button>
-      </Link>
-    </>
-  )}
-</div>
+                <Link to="/map" onClick={resetMap}>
+                  <Button
+                    size="sm"
+                    className="h-8 rounded-full px-3 text-[11px] sm:h-9 sm:px-4 sm:text-sm"
+                  >
+                    Start Free
+                  </Button>
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
+      </header>
 
       <main className="mx-auto flex w-full max-w-[1280px] flex-col gap-8 px-4 pt-5 sm:gap-10 sm:px-6 sm:pt-7 md:gap-14 md:px-8 md:pt-10 lg:px-10">
         <section
@@ -124,7 +130,6 @@ const logout = useMapStore((state) => state.logout);
 
           <div className="relative grid gap-5 sm:gap-6 md:grid-cols-[1.25fr_0.75fr] md:items-end md:gap-10">
             <div className="space-y-3.5 sm:space-y-5 md:space-y-6">
-
               <h1
                 style={{ animationDelay: "60ms" }}
                 className="home-reveal max-w-3xl text-[clamp(1.9rem,8.1vw,4.35rem)] leading-[1.04] text-[#1a2740] md:leading-[1.02]"
@@ -234,9 +239,8 @@ const logout = useMapStore((state) => state.logout);
               aria-label="Contact links"
               className="flex flex-wrap items-center gap-2 sm:gap-3"
             >
-
               <a
-								href="mailto:kjato.arta@gmail.com"
+                href="mailto:kjato.arta@gmail.com"
                 className="inline-flex items-center gap-2 rounded-full border border-[#f1ddca] bg-[#fff6ec] px-3 py-2 text-[13px] font-semibold text-[#66360f] transition-colors hover:border-[#ffc79a] hover:bg-[#fff1e2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF6B00]/50"
               >
                 <Mail className="h-4 w-4 text-[#FF6B00]" aria-hidden="true" />
